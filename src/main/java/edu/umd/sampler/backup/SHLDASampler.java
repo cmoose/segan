@@ -1,8 +1,8 @@
-package sampler.backup;
+package edu.umd.sampler.backup;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizer;
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -14,16 +14,16 @@ import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-import sampler.supervised.objective.GaussianIndLinearRegObjective;
-import sampling.likelihood.DirMult;
-import sampling.likelihood.TruncatedStickBreaking;
-import sampling.util.TreeNode;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.MimnoTopicCoherence;
+import edu.umd.sampler.supervised.objective.GaussianIndLinearRegObjective;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.likelihood.TruncatedStickBreaking;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
 
 /**
  *

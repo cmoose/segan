@@ -1,4 +1,4 @@
-package graph;
+package edu.umd.graph;
 
 /**
  *

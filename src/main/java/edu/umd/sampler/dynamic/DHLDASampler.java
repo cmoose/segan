@@ -1,8 +1,8 @@
-package sampler.dynamic;
+package edu.umd.sampler.dynamic;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizer;
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStream;
@@ -14,12 +14,12 @@ import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-import sampling.likelihood.LogisticNormal;
-import sampling.likelihood.TruncatedStickBreaking;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SamplerUtils;
+import edu.umd.sampling.likelihood.LogisticNormal;
+import edu.umd.sampling.likelihood.TruncatedStickBreaking;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
 
 /**
  *

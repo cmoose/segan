@@ -1,4 +1,4 @@
-package sampling.util;
+package edu.umd.sampling.util;
 
 /**
  * Implementation of a table in the Chinese restaurant process, in which only

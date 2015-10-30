@@ -1,7 +1,7 @@
-package sampler;
+package edu.umd.sampler;
 
-import core.AbstractSampler;
-import data.TextDataset;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.TextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import sampling.likelihood.DirMult;
-import sampling.util.SparseCount;
-import util.CLIUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.MimnoTopicCoherence;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
 
 /**
  * Implementation of a Gibbs sampler for LDA.

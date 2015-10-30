@@ -1,6 +1,6 @@
-package sampler.dynamic;
+package edu.umd.sampler.dynamic;
 
-import sampling.util.SparseCount;
+import edu.umd.sampling.util.SparseCount;
 
 /**
  * Implement the state for linear state-space model. Each state is associated

@@ -1,8 +1,8 @@
-package optimization;
+package edu.umd.optimization;
 
 import cc.mallet.optimize.Optimizable;
 import java.util.ArrayList;
-import util.SparseVector;
+import edu.umd.util.SparseVector;
 
 /**
  * Solving L2-norm multiple linear regression using L-BFGS.

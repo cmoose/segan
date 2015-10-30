@@ -1,10 +1,10 @@
-package core.crossvalidation;
+package edu.umd.core.crossvalidation;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
-import util.IOUtils;
+import edu.umd.util.IOUtils;
 
 /**
  *

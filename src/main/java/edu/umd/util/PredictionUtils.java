@@ -1,4 +1,4 @@
-package util;
+package edu.umd.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,12 +8,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import util.evaluation.ClassificationEvaluation;
-import util.evaluation.Measurement;
-import util.evaluation.MultilabelClassificationEvaluation;
-import util.evaluation.RankingEvaluation;
-import util.evaluation.RankingPerformance;
-import util.evaluation.RegressionEvaluation;
+
+import edu.umd.util.evaluation.ClassificationEvaluation;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.MultilabelClassificationEvaluation;
+import edu.umd.util.evaluation.RankingEvaluation;
+import edu.umd.util.evaluation.RankingPerformance;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  *

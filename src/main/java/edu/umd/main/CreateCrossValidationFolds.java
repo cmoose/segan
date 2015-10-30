@@ -1,18 +1,18 @@
-package main;
+package edu.umd.main;
 
-import core.AbstractRunner;
-import core.crossvalidation.CrossValidation;
-import core.crossvalidation.Fold;
-import core.crossvalidation.RegressionDocumentInstance;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractRunner;
+import edu.umd.core.crossvalidation.CrossValidation;
+import edu.umd.core.crossvalidation.Fold;
+import edu.umd.core.crossvalidation.RegressionDocumentInstance;
+import edu.umd.data.ResponseTextDataset;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import util.CLIUtils;
-import util.IOUtils;
-import util.StatUtils;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.StatUtils;
 
 /**
  *

@@ -1,4 +1,4 @@
-package sampler.labeled.baselines;
+package edu.umd.sampler.labeled.baselines;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,11 +9,11 @@ import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-import sampling.util.SparseCount;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SparseVector;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SparseVector;
 
 /**
  *

@@ -1,9 +1,9 @@
-package svm;
+package edu.umd.svm;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import util.IOUtils;
-import util.SparseVector;
+import edu.umd.util.IOUtils;
+import edu.umd.util.SparseVector;
 
 /**
  *

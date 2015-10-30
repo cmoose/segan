@@ -1,8 +1,8 @@
-package data;
+package edu.umd.data;
 
-import core.crossvalidation.CrossValidation;
-import core.crossvalidation.Fold;
-import core.crossvalidation.Instance;
+import edu.umd.core.crossvalidation.CrossValidation;
+import edu.umd.core.crossvalidation.Fold;
+import edu.umd.core.crossvalidation.Instance;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,12 +13,12 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import sampling.util.SparseCount;
-import util.CLIUtils;
-import util.DataUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.evaluation.MimnoTopicCoherence;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.DataUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
 
 /**
  * A dataset consists of a set of documents.

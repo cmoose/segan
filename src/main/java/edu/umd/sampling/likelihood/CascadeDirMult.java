@@ -1,8 +1,9 @@
-package sampling.likelihood;
+package edu.umd.sampling.likelihood;
 
 import java.io.Serializable;
-import sampling.AbstractDiscreteFiniteLikelihoodModel;
-import sampling.util.SparseCount;
+
+import edu.umd.sampling.AbstractDiscreteFiniteLikelihoodModel;
+import edu.umd.sampling.util.SparseCount;
 
 /**
  *

@@ -1,9 +1,9 @@
-package sampler.supervised.regression;
+package edu.umd.sampler.supervised.regression;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
-import core.AbstractExperiment;
-import core.AbstractSampler;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractExperiment;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.ResponseTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,23 +13,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import optimization.RidgeLinearRegressionOptimizable;
+import edu.umd.optimization.RidgeLinearRegressionOptimizable;
+import edu.umd.sampler.unsupervised.LDA;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import sampler.unsupervised.LDA;
-import sampling.likelihood.DirMult;
-import util.CLIUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.MismatchRuntimeException;
-import util.PredictionUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.SparseVector;
-import util.StatUtils;
-import util.evaluation.Measurement;
-import util.evaluation.RegressionEvaluation;
-import util.normalizer.ZNormalizer;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.MismatchRuntimeException;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.RegressionEvaluation;
+import edu.umd.util.normalizer.ZNormalizer;
 
 /**
  * Implementation of Supervised Latent Dirichlet Allocation (SLDA).

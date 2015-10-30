@@ -1,4 +1,4 @@
-package svm;
+package edu.umd.svm;
 
 /**
  *
@@ -8,10 +8,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import util.IOUtils;
-import util.RankingItem;
-import util.RankingItemList;
-import util.evaluation.RankingPerformance;
+import edu.umd.util.IOUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.RankingItemList;
+import edu.umd.util.evaluation.RankingPerformance;
 
 public class SVMLight {
 

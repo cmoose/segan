@@ -1,10 +1,10 @@
-package data;
+package edu.umd.data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
-import util.IOUtils;
+import edu.umd.util.IOUtils;
 
 /**
  *

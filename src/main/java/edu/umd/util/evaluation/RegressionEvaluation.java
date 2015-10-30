@@ -1,7 +1,8 @@
-package util.evaluation;
+package edu.umd.util.evaluation;
 
 import java.util.ArrayList;
-import util.StatUtils;
+
+import edu.umd.util.StatUtils;
 
 /**
  *

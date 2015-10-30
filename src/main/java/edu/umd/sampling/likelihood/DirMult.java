@@ -1,11 +1,12 @@
-package sampling.likelihood;
+package edu.umd.sampling.likelihood;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import sampling.AbstractDiscreteFiniteLikelihoodModel;
-import sampling.util.SparseCount;
-import util.SamplerUtils;
+
+import edu.umd.sampling.AbstractDiscreteFiniteLikelihoodModel;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.SamplerUtils;
 import weka.core.SerializedObject;
 
 /**

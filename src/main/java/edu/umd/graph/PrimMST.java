@@ -1,4 +1,4 @@
-package graph;
+package edu.umd.graph;
 
 import java.util.HashSet;
 import java.util.PriorityQueue;

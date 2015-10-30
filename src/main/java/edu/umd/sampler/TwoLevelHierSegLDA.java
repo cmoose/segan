@@ -1,18 +1,18 @@
-package sampler;
+package edu.umd.sampler;
 
-import core.AbstractSampler;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.ResponseTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import sampling.likelihood.DirMult;
-import util.CLIUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.SamplerUtils;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
 
 /**
  *

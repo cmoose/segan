@@ -1,8 +1,8 @@
-package sampler.supervised.regression.shdp;
+package edu.umd.sampler.supervised.regression.shdp;
 
 import cc.mallet.types.Dirichlet;
-import core.AbstractSampler;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.ResponseTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,20 +12,20 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import optimization.GurobiMLRL2Norm;
-import regression.Regressor;
-import sampler.LDA;
-import sampling.likelihood.DirMult;
-import sampling.util.SparseCount;
-import util.IOUtils;
-import util.MiscUtils;
-import util.PredictionUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.SparseVector;
-import util.StatUtils;
-import util.evaluation.Measurement;
-import util.evaluation.RegressionEvaluation;
+import edu.umd.optimization.GurobiMLRL2Norm;
+import edu.umd.regression.Regressor;
+import edu.umd.sampler.LDA;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  * Implementation of supervised hierarchical Dirichlet process using direct

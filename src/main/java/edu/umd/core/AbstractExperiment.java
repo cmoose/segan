@@ -1,7 +1,6 @@
-package core;
+package edu.umd.core;
 
-import core.AbstractSampler.InitialState;
-import core.crossvalidation.Fold;
+import edu.umd.core.crossvalidation.Fold;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,12 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import regression.AbstractRegressor;
-import util.CLIUtils;
-import util.IOUtils;
-import util.RankingItem;
-import util.StatUtils;
-import util.evaluation.Measurement;
+
+import edu.umd.regression.AbstractRegressor;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.Measurement;
 
 /**
  * @param <D> dataset
@@ -46,7 +46,7 @@ public abstract class AbstractExperiment<D extends AbstractDataset> extends Abst
     public static int max_iters = 1000;
     public static int sample_lag = 50;
     public static int report_interval = 5;
-    protected InitialState initState;
+    protected AbstractSampler.InitialState initState;
     protected boolean paramOpt;
     public static String experimentPath;
     protected D data;
@@ -84,10 +84,10 @@ public abstract class AbstractExperiment<D extends AbstractDataset> extends Abst
         String init = CLIUtils.getStringArgument(cmd, "init", "random");
         switch (init) {
             case "random":
-                initState = InitialState.RANDOM;
+                initState = AbstractSampler.InitialState.RANDOM;
                 break;
             case "preset":
-                initState = InitialState.PRESET;
+                initState = AbstractSampler.InitialState.PRESET;
                 break;
             default:
                 throw new RuntimeException("Initialization " + init + " not supported");

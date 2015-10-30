@@ -1,9 +1,9 @@
-package sampler.labeled.hierarchy;
+package edu.umd.sampler.labeled.hierarchy;
 
 import cc.mallet.types.Dirichlet;
 import cc.mallet.util.Randoms;
-import core.AbstractSampler;
-import data.LabelTextDataset;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.LabelTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,22 +19,22 @@ import java.util.Set;
 import java.util.Stack;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import sampler.labeled.LabeledLDA;
-import sampling.likelihood.CascadeDirMult.PathAssumption;
-import sampling.likelihood.DirMult;
-import sampling.util.SparseCount;
-import sampling.util.TreeNode;
-import taxonomy.AbstractTaxonomyBuilder;
-import taxonomy.BetaTreeBuilder;
-import taxonomy.MSTBuilder;
-import util.CLIUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.PredictionUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.SparseVector;
-import util.StatUtils;
+import edu.umd.sampler.labeled.LabeledLDA;
+import edu.umd.sampling.likelihood.CascadeDirMult.PathAssumption;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.taxonomy.AbstractTaxonomyBuilder;
+import edu.umd.taxonomy.BetaTreeBuilder;
+import edu.umd.taxonomy.MSTBuilder;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.StatUtils;
 
 /**
  *

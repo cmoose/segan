@@ -1,25 +1,25 @@
-package sampler.backup;
+package edu.umd.sampler.backup;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizable;
-import core.AbstractSampler;
-import core.AbstractSampler.InitialState;
+import edu.umd.core.AbstractSampler;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import optimization.GurobiMLRL2Norm;
-import sampler.LDA;
-import sampling.likelihood.DirMult;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.ClassificationEvaluation;
-import util.evaluation.Measurement;
-import util.evaluation.RegressionEvaluation;
+import edu.umd.optimization.GurobiMLRL2Norm;
+import edu.umd.sampler.LDA;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.ClassificationEvaluation;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  *

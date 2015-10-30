@@ -1,4 +1,4 @@
-package optimization;
+package edu.umd.optimization;
 
 import edu.stanford.nlp.math.ArrayMath;
 import edu.stanford.nlp.optimization.DiffFunction;

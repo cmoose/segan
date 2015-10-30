@@ -2,18 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package edu.umd.main;
 
-import core.AbstractRunner;
-import data.CorpusProcessor;
-import data.LabelResponseTextDataset;
-import data.LabelTextDataset;
-import data.ResponseTextDataset;
-import data.TextDataset;
+import edu.umd.core.AbstractRunner;
+import edu.umd.data.CorpusProcessor;
+import edu.umd.data.LabelResponseTextDataset;
+import edu.umd.data.LabelTextDataset;
+import edu.umd.data.ResponseTextDataset;
+import edu.umd.data.TextDataset;
 import java.io.File;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import util.CLIUtils;
+import edu.umd.util.CLIUtils;
 
 /**
  *

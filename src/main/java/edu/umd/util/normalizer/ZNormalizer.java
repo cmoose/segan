@@ -1,10 +1,7 @@
-package util.normalizer;
+package edu.umd.util.normalizer;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import util.MiscUtils;
-import util.StatUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.StatUtils;
 
 /**
  *

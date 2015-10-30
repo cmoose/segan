@@ -1,8 +1,8 @@
-package sampler.supervised.classification;
+package edu.umd.sampler.supervised.classification;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
-import core.AbstractSampler;
-import data.LabelTextDataset;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.LabelTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,22 +14,22 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import optimization.RidgeLogisticRegressionOptimizable;
+import edu.umd.optimization.RidgeLogisticRegressionOptimizable;
+import edu.umd.sampler.LDA;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import sampler.LDA;
-import sampling.likelihood.DirMult;
-import util.CLIUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.PredictionUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.SparseVector;
-import util.StatUtils;
-import util.evaluation.ClassificationEvaluation;
-import util.evaluation.Measurement;
-import util.evaluation.RankingEvaluation;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.ClassificationEvaluation;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.RankingEvaluation;
 
 /**
  *

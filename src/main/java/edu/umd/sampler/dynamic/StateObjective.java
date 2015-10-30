@@ -1,7 +1,7 @@
-package sampler.dynamic;
+package edu.umd.sampler.dynamic;
 
 import cc.mallet.optimize.Optimizable;
-import sampling.util.SparseCount;
+import edu.umd.sampling.util.SparseCount;
 
 /**
  *

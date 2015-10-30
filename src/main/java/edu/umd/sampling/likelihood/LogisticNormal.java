@@ -1,8 +1,9 @@
-package sampling.likelihood;
+package edu.umd.sampling.likelihood;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import sampling.AbstractDiscreteFiniteLikelihoodModel;
+
+import edu.umd.sampling.AbstractDiscreteFiniteLikelihoodModel;
 
 /**
  *

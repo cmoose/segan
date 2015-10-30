@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sampler.backup;
+package edu.umd.sampler.backup;
 
 import cc.mallet.types.Dirichlet;
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,17 +15,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
-import sampler.LDA;
-import sampling.util.Restaurant;
-import sampling.util.SparseCount;
-import sampling.util.FullTable;
-import sampling.util.TreeNode;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.MimnoTopicCoherence;
+
+import edu.umd.sampler.LDA;
+import edu.umd.sampling.util.Restaurant;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.sampling.util.FullTable;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
 
 /**
  *

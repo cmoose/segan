@@ -1,22 +1,23 @@
-package sampler.supervised.classification;
+package edu.umd.sampler.supervised.classification;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizable;
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
-import sampler.LDA;
-import sampling.likelihood.DirMult;
-import sampling.util.SparseCount;
-import util.IOUtils;
-import util.MiscUtils;
-import util.PredictionUtils;
-import util.SamplerUtils;
-import util.SparseVector;
-import util.StatUtils;
-import util.evaluation.MimnoTopicCoherence;
+
+import edu.umd.sampler.LDA;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
 
 /**
  *

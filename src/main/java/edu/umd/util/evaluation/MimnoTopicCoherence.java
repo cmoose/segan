@@ -1,10 +1,11 @@
-package util.evaluation;
+package edu.umd.util.evaluation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import util.MiscUtils;
+
+import edu.umd.util.MiscUtils;
 
 /**
  *

@@ -1,11 +1,11 @@
-package sampling.likelihood;
+package edu.umd.sampling.likelihood;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
-import util.IOUtils;
-import util.MiscUtils;
-import util.SamplerUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
 
 /**
  * Implementation of a truncated stick breaking process.

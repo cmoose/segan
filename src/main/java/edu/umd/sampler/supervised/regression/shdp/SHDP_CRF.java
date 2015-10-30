@@ -1,27 +1,26 @@
-package sampler.supervised.regression.shdp;
+package edu.umd.sampler.supervised.regression.shdp;
 
-import core.AbstractSampler;
-import core.AbstractSampler.InitialState;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.ResponseTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import optimization.GurobiMLRL2Norm;
-import regression.Regressor;
-import sampler.LDA;
-import sampling.likelihood.DirMult;
-import sampling.util.FullTable;
-import sampling.util.Restaurant;
-import util.IOUtils;
-import util.MiscUtils;
-import util.PredictionUtils;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.Measurement;
-import util.evaluation.MimnoTopicCoherence;
-import util.evaluation.RegressionEvaluation;
+import edu.umd.optimization.GurobiMLRL2Norm;
+import edu.umd.regression.Regressor;
+import edu.umd.sampler.LDA;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.FullTable;
+import edu.umd.sampling.util.Restaurant;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  * Implementation of Supervised Hierarchical Dirichlet Process using the Chinese

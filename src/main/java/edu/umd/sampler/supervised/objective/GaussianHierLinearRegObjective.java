@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sampler.supervised.objective;
+package edu.umd.sampler.supervised.objective;
 
 import cc.mallet.optimize.Optimizable;
 import java.util.ArrayList;

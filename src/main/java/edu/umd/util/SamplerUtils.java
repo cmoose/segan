@@ -1,10 +1,10 @@
-package util;
+package edu.umd.util;
 
 import cc.mallet.util.Randoms;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-import sampling.util.SparseCount;
+import edu.umd.sampling.util.SparseCount;
 
 /**
  *

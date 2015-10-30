@@ -1,8 +1,8 @@
-package sampler;
+package edu.umd.sampler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import util.MiscUtils;
+import edu.umd.util.MiscUtils;
 
 /**
  * Implementation of a node in a LDA-tree.

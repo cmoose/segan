@@ -1,15 +1,15 @@
-package optimization;
+package edu.umd.optimization;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
-import core.AbstractLinearModel;
+import edu.umd.core.AbstractLinearModel;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
-import util.IOUtils;
-import util.MiscUtils;
-import util.SparseVector;
-import util.evaluation.Measurement;
-import util.evaluation.RegressionEvaluation;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  *

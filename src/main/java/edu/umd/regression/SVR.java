@@ -1,15 +1,15 @@
-package regression;
+package edu.umd.regression;
 
-import core.crossvalidation.Fold;
-import data.ResponseTextDataset;
+import edu.umd.core.crossvalidation.Fold;
+import edu.umd.data.ResponseTextDataset;
 import java.io.File;
 import java.util.ArrayList;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import svm.SVMLight;
-import svm.SVMUtils;
-import util.CLIUtils;
-import util.MiscUtils;
+import edu.umd.svm.SVMLight;
+import edu.umd.svm.SVMUtils;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.MiscUtils;
 
 /**
  *

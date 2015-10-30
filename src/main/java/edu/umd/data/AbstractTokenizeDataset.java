@@ -1,11 +1,11 @@
-package data;
+package edu.umd.data;
 
-import core.AbstractDataset;
+import edu.umd.core.AbstractDataset;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Set;
-import main.GlobalConstants;
+import edu.umd.main.GlobalConstants;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;

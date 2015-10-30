@@ -1,4 +1,4 @@
-package graph;
+package edu.umd.graph;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import sampling.util.TreeNode;
-import util.RankingItem;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.util.RankingItem;
 
 /**
  * Implement Edmonds' algorithm to find minimum spanning tree in a directed

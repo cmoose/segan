@@ -1,4 +1,4 @@
-package optimization;
+package edu.umd.optimization;
 
 //import gurobi.GRB;
 //import gurobi.GRBEnv;
@@ -7,8 +7,8 @@ package optimization;
 //import gurobi.GRBQuadExpr;
 //import gurobi.GRBVar;
 import java.util.Random;
-import util.MiscUtils;
-import util.SamplerUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
 
 /**
  * Obsolete. To be removed. L2-norm multiple linear regression.

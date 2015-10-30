@@ -1,10 +1,10 @@
-package sampling;
+package edu.umd.sampling;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
-import sampling.util.SparseCount;
+import edu.umd.sampling.util.SparseCount;
 
 /**
  * An abstract likelihood model of generating countable finite observations.

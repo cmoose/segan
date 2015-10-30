@@ -1,18 +1,18 @@
-package data;
+package edu.umd.data;
 
-import core.crossvalidation.CrossValidation;
-import core.crossvalidation.Fold;
-import core.crossvalidation.Instance;
+import edu.umd.core.crossvalidation.CrossValidation;
+import edu.umd.core.crossvalidation.Fold;
+import edu.umd.core.crossvalidation.Instance;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import util.CLIUtils;
-import util.IOUtils;
-import util.StatUtils;
-import util.normalizer.ZNormalizer;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.normalizer.ZNormalizer;
 
 /**
  *

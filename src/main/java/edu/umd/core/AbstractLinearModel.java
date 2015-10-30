@@ -1,4 +1,4 @@
-package core;
+package edu.umd.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import util.IOUtils;
-import util.RankingItem;
+import edu.umd.util.IOUtils;
+import edu.umd.util.RankingItem;
 
 /**
  *

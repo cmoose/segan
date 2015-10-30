@@ -1,11 +1,11 @@
-package sampler.dynamic;
+package edu.umd.sampler.dynamic;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizer;
 import java.util.Arrays;
 import java.util.Random;
-import util.MiscUtils;
-import util.SamplerUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
 
 /**
  *

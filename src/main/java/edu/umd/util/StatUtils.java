@@ -1,11 +1,11 @@
-package util;
+package edu.umd.util;
 
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
-import sampling.util.SparseCount;
-import util.normalizer.AbstractNormalizer;
-import util.normalizer.MinMaxNormalizer;
-import util.normalizer.ZNormalizer;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.normalizer.AbstractNormalizer;
+import edu.umd.util.normalizer.MinMaxNormalizer;
+import edu.umd.util.normalizer.ZNormalizer;
 
 /**
  *

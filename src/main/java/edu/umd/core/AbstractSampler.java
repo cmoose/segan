@@ -1,4 +1,4 @@
-package core;
+package edu.umd.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,17 +13,17 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import main.GlobalConstants;
+import edu.umd.main.GlobalConstants;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import sampler.unsupervised.LDA;
-import sampler.unsupervised.RecursiveLDA;
-import sampling.likelihood.CascadeDirMult.PathAssumption;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
+import edu.umd.sampler.unsupervised.LDA;
+import edu.umd.sampler.unsupervised.RecursiveLDA;
+import edu.umd.sampling.likelihood.CascadeDirMult.PathAssumption;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
 
 /**
  *

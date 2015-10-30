@@ -1,15 +1,15 @@
-package sampler.labeled;
+package edu.umd.sampler.labeled;
 
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
-import sampling.likelihood.DirMult;
-import util.IOUtils;
-import util.MiscUtils;
-import util.SamplerUtils;
-import util.StatUtils;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
 
 /**
  *

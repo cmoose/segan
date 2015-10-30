@@ -1,4 +1,4 @@
-package util;
+package edu.umd.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;

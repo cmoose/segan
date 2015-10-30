@@ -1,4 +1,4 @@
-package sampling;
+package edu.umd.sampling;
 
 import java.util.Random;
 

@@ -1,10 +1,10 @@
-package taxonomy;
+package edu.umd.taxonomy;
 
 import java.util.ArrayList;
-import sampling.util.FullTable;
-import sampling.util.Restaurant;
-import util.SamplerUtils;
-import util.SparseVector;
+import edu.umd.sampling.util.FullTable;
+import edu.umd.sampling.util.Restaurant;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.SparseVector;
 
 /**
  *

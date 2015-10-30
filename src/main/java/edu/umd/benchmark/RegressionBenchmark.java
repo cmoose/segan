@@ -1,25 +1,25 @@
-package benchmark;
+package edu.umd.benchmark;
 
-import core.AbstractExperiment;
-import core.AbstractSampler;
-import core.AbstractSampler.InitialState;
-import core.crossvalidation.Fold;
-import data.CorpusProcessor;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractExperiment;
+import edu.umd.core.AbstractSampler;
+import edu.umd.core.AbstractSampler.InitialState;
+import edu.umd.core.crossvalidation.Fold;
+import edu.umd.data.CorpusProcessor;
+import edu.umd.data.ResponseTextDataset;
 import java.io.File;
 import java.util.ArrayList;
-import optimization.LBFGSLinearRegression;
-import optimization.OWLQNLinearRegression;
+import edu.umd.optimization.LBFGSLinearRegression;
+import edu.umd.optimization.OWLQNLinearRegression;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import regression.SVR;
-import sampler.HTM;
-import sampler.supervised.regression.SLDA;
-import sampler.supervised.regression.SNLDA;
-import sampling.likelihood.CascadeDirMult.PathAssumption;
-import util.CLIUtils;
-import util.IOUtils;
-import util.PredictionUtils;
+import edu.umd.regression.SVR;
+import edu.umd.sampler.HTM;
+import edu.umd.sampler.supervised.regression.SLDA;
+import edu.umd.sampler.supervised.regression.SNLDA;
+import edu.umd.sampling.likelihood.CascadeDirMult.PathAssumption;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.PredictionUtils;
 
 /**
  *

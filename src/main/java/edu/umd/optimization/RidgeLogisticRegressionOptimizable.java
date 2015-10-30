@@ -1,7 +1,7 @@
-package optimization;
+package edu.umd.optimization;
 
 import cc.mallet.optimize.Optimizable;
-import util.SparseVector;
+import edu.umd.util.SparseVector;
 
 /**
  *

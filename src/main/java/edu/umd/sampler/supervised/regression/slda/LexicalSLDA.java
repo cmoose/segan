@@ -1,17 +1,17 @@
-package sampler.supervised.regression.slda;
+package edu.umd.sampler.supervised.regression.slda;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import optimization.GurobiMLRL2Norm;
-import sampling.likelihood.DirMult;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.StatUtils;
+import edu.umd.optimization.GurobiMLRL2Norm;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
 
 /**
  *

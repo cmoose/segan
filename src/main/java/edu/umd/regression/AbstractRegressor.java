@@ -1,18 +1,18 @@
-package regression;
+package edu.umd.regression;
 
-import core.AbstractRunner;
+import edu.umd.core.AbstractRunner;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import util.IOUtils;
-import util.PredictionUtils;
-import util.RankingItem;
-import util.RankingItemList;
-import util.evaluation.ClassificationEvaluation;
-import util.evaluation.Measurement;
-import util.evaluation.RankingPerformance;
+import edu.umd.util.IOUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.RankingItemList;
+import edu.umd.util.evaluation.ClassificationEvaluation;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.RankingPerformance;
 
 /**
  *

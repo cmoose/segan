@@ -1,8 +1,9 @@
-package sampling.util;
+package edu.umd.sampling.util;
 
 import cc.mallet.types.Dirichlet;
 import java.util.Arrays;
-import sampling.likelihood.DirMult;
+
+import edu.umd.sampling.likelihood.DirMult;
 
 /**
  * Implementation of tree node which stores a topic (i.e., a multinomial

@@ -1,4 +1,4 @@
-package core.crossvalidation;
+package edu.umd.core.crossvalidation;
 
 /**
  *

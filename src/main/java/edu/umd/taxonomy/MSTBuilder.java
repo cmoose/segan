@@ -1,16 +1,16 @@
-package taxonomy;
+package edu.umd.taxonomy;
 
-import graph.DirectedGraph;
-import graph.EdmondsMST;
-import graph.GraphEdge;
-import graph.GraphNode;
+import edu.umd.graph.DirectedGraph;
+import edu.umd.graph.EdmondsMST;
+import edu.umd.graph.GraphEdge;
+import edu.umd.graph.GraphNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
-import sampling.util.TreeNode;
-import util.SparseVector;
-import util.StatUtils;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.util.SparseVector;
+import edu.umd.util.StatUtils;
 
 /**
  *

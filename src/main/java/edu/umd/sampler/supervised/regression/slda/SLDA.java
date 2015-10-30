@@ -1,31 +1,31 @@
-package sampler.supervised.regression.slda;
+package edu.umd.sampler.supervised.regression.slda;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
-import core.AbstractExperiment;
-import core.AbstractSampler;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractExperiment;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.ResponseTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import optimization.GurobiMLRL2Norm;
+import edu.umd.optimization.GurobiMLRL2Norm;
+import edu.umd.sampler.LDA;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import regression.Regressor;
-import sampler.LDA;
-import sampler.supervised.objective.GaussianIndLinearRegObjective;
-import sampling.likelihood.DirMult;
-import util.CLIUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.PredictionUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.Measurement;
-import util.evaluation.MimnoTopicCoherence;
-import util.evaluation.RegressionEvaluation;
+import edu.umd.regression.Regressor;
+import edu.umd.sampler.supervised.objective.GaussianIndLinearRegObjective;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  * This is obsolete. Use sampler.supervised.regression.SLDA instead.

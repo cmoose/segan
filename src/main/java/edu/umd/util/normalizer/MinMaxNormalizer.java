@@ -1,6 +1,6 @@
-package util.normalizer;
+package edu.umd.util.normalizer;
 
-import util.StatUtils;
+import edu.umd.util.StatUtils;
 
 /**
  *

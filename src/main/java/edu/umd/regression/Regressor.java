@@ -1,6 +1,6 @@
-package regression;
+package edu.umd.regression;
 
-import data.ResponseTextDataset;
+import edu.umd.data.ResponseTextDataset;
 import java.io.File;
 
 /**

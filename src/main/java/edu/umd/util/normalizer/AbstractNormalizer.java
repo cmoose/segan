@@ -1,4 +1,4 @@
-package util.normalizer;
+package edu.umd.util.normalizer;
 
 /**
  *

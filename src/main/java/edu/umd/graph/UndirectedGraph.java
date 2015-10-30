@@ -1,4 +1,4 @@
-package graph;
+package edu.umd.graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,19 +1,19 @@
-package regression;
+package edu.umd.regression;
 
-import core.crossvalidation.Fold;
-import data.ResponseTextDataset;
+import edu.umd.core.crossvalidation.Fold;
+import edu.umd.data.ResponseTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import optimization.GurobiMLRL1Norm;
-import optimization.GurobiMLRL2Norm;
+import edu.umd.optimization.GurobiMLRL1Norm;
+import edu.umd.optimization.GurobiMLRL2Norm;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import util.CLIUtils;
-import util.IOUtils;
-import util.RankingItem;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.RankingItem;
 
 /**
  *

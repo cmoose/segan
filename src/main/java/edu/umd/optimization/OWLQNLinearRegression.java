@@ -1,8 +1,8 @@
-package optimization;
+package edu.umd.optimization;
 
-import core.AbstractExperiment;
-import core.AbstractLinearModel;
-import data.ResponseTextDataset;
+import edu.umd.core.AbstractExperiment;
+import edu.umd.core.AbstractLinearModel;
+import edu.umd.data.ResponseTextDataset;
 import edu.stanford.nlp.optimization.DiffFunction;
 import java.io.File;
 import java.text.DateFormat;
@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import util.CLIUtils;
-import util.IOUtils;
-import util.PredictionUtils;
-import util.SparseVector;
-import util.normalizer.ZNormalizer;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.normalizer.ZNormalizer;
 
 /**
  *

@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sampler.backup;
+package edu.umd.sampler.backup;
 
-import sampler.supervised.objective.GaussianIndLinearRegObjective;
+import edu.umd.sampler.supervised.objective.GaussianIndLinearRegObjective;
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizer;
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,17 +20,17 @@ import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-import sampling.likelihood.DirMult;
-import sampling.likelihood.TruncatedStickBreaking;
-import sampling.util.TreeNode;
-import sampling.util.SparseCount;
-import util.IOUtils;
-import util.MiscUtils;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.Measurement;
-import util.evaluation.MimnoTopicCoherence;
-import util.evaluation.RegressionEvaluation;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.likelihood.TruncatedStickBreaking;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  *

@@ -1,4 +1,4 @@
-package util.evaluation;
+package edu.umd.util.evaluation;
 
 /**
  *
@@ -10,9 +10,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
-import util.IOUtils;
-import util.RankingItem;
-import util.RankingItemList;
+
+import edu.umd.util.IOUtils;
+import edu.umd.util.RankingItemList;
+import edu.umd.util.RankingItem;
 
 /**
  * This is to replace the class Evaluation

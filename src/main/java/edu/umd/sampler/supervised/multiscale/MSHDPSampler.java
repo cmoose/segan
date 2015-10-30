@@ -1,8 +1,8 @@
-package sampler.supervised.multiscale;
+package edu.umd.sampler.supervised.multiscale;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizer;
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,20 +13,21 @@ import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-import sampler.LDA;
-import sampler.supervised.objective.GaussianIndLinearRegObjective;
-import sampling.likelihood.DirMult;
-import sampling.util.Restaurant;
-import sampling.util.SparseCount;
-import sampling.util.FullTable;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.SamplerUtils;
-import util.StatUtils;
-import util.evaluation.Measurement;
-import util.evaluation.MimnoTopicCoherence;
-import util.evaluation.RegressionEvaluation;
+
+import edu.umd.sampler.LDA;
+import edu.umd.sampler.supervised.objective.GaussianIndLinearRegObjective;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.Restaurant;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.sampling.util.FullTable;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.Measurement;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
+import edu.umd.util.evaluation.RegressionEvaluation;
 
 /**
  *

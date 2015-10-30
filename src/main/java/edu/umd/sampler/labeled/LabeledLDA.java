@@ -1,7 +1,7 @@
-package sampler.labeled;
+package edu.umd.sampler.labeled;
 
-import core.AbstractSampler;
-import data.LabelTextDataset;
+import edu.umd.core.AbstractSampler;
+import edu.umd.data.LabelTextDataset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,16 +10,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import sampling.likelihood.DirMult;
-import sampling.util.SparseCount;
-import util.CLIUtils;
-import util.IOUtils;
-import util.MiscUtils;
-import util.PredictionUtils;
-import util.SamplerUtils;
-import util.SparseVector;
-import util.StatUtils;
-import util.evaluation.MimnoTopicCoherence;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.SparseCount;
+import edu.umd.util.CLIUtils;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.PredictionUtils;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.SparseVector;
+import edu.umd.util.StatUtils;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
 
 /**
  * This is an implementation of a Gibbs sampler for Labeled LDA (Ramage et. al.

@@ -1,4 +1,4 @@
-package taxonomy;
+package edu.umd.taxonomy;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
-import sampling.util.TreeNode;
-import util.IOUtils;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.util.IOUtils;
 
 /**
  *

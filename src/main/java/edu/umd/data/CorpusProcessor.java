@@ -1,4 +1,4 @@
-package data;
+package edu.umd.data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import main.GlobalConstants;
+import edu.umd.main.GlobalConstants;
 import opennlp.tools.sentdetect.SentenceDetector;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
@@ -21,11 +21,11 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.commons.math3.stat.inference.ChiSquareTest;
-import util.IOUtils;
-import util.MiscUtils;
-import util.RankingItem;
-import util.Stemmer;
-import util.StopwordRemoval;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.RankingItem;
+import edu.umd.util.Stemmer;
+import edu.umd.util.StopwordRemoval;
 
 /**
  * Process text data

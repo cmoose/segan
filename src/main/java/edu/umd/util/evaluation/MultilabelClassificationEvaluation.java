@@ -1,4 +1,4 @@
-package util.evaluation;
+package edu.umd.util.evaluation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import mulan.classifier.MultiLabelOutput;
 import mulan.evaluation.measure.IsError;
 import mulan.evaluation.measure.MeanAveragePrecision;
 import mulan.evaluation.measure.OneError;
-import util.RankingItem;
+import edu.umd.util.RankingItem;
 
 /**
  *

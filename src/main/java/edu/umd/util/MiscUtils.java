@@ -1,4 +1,4 @@
-package util;
+package edu.umd.util;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import sampling.util.SparseCount;
+import edu.umd.sampling.util.SparseCount;
 
 /**
  *

@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sampler.dynamic;
+package edu.umd.sampler.dynamic;
 
 import java.util.HashMap;
-import sampling.likelihood.LogisticNormal;
-import sampling.util.TreeNode;
-import util.MiscUtils;
+import edu.umd.sampling.likelihood.LogisticNormal;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.util.MiscUtils;
 
 /**
  *

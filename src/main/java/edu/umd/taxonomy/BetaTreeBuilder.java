@@ -1,13 +1,13 @@
-package taxonomy;
+package edu.umd.taxonomy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import sampling.likelihood.DirMult;
-import sampling.util.FullTable;
-import sampling.util.Restaurant;
-import sampling.util.TreeNode;
-import util.MiscUtils;
-import util.SamplerUtils;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.FullTable;
+import edu.umd.sampling.util.Restaurant;
+import edu.umd.sampling.util.TreeNode;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
 
 /**
  *

@@ -1,16 +1,16 @@
-package sampler;
+package edu.umd.sampler;
 
-import core.AbstractSampler;
+import edu.umd.core.AbstractSampler;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import sampling.likelihood.DirMult;
-import sampling.util.FullTable;
-import sampling.util.Restaurant;
-import util.IOUtils;
-import util.MiscUtils;
-import util.SamplerUtils;
-import util.evaluation.MimnoTopicCoherence;
+import edu.umd.sampling.likelihood.DirMult;
+import edu.umd.sampling.util.FullTable;
+import edu.umd.sampling.util.Restaurant;
+import edu.umd.util.IOUtils;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
+import edu.umd.util.evaluation.MimnoTopicCoherence;
 
 
 /**

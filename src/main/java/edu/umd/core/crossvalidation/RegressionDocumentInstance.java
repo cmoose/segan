@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package core.crossvalidation;
+package edu.umd.core.crossvalidation;
 
 import java.util.ArrayList;
 import java.util.Collections;

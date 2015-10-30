@@ -1,4 +1,4 @@
-package core.crossvalidation;
+package edu.umd.core.crossvalidation;
 
 import java.io.File;
 import java.util.ArrayList;

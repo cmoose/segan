@@ -1,11 +1,10 @@
-package sampler.supervised.objective;
+package edu.umd.sampler.supervised.objective;
 
 import cc.mallet.optimize.LimitedMemoryBFGS;
 import cc.mallet.optimize.Optimizable;
 import java.util.Random;
-import util.MiscUtils;
-import util.SamplerUtils;
-import util.SparseVector;
+import edu.umd.util.MiscUtils;
+import edu.umd.util.SamplerUtils;
 
 /**
  * Bayesian version of IndependentLinearRegressionObject where the parameters

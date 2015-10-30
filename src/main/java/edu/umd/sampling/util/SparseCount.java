@@ -1,4 +1,4 @@
-package sampling.util;
+package edu.umd.sampling.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;

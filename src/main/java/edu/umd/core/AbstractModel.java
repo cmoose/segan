@@ -1,12 +1,12 @@
-package core;
+package edu.umd.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import util.IOUtils;
-import util.evaluation.Measurement;
+import edu.umd.util.IOUtils;
+import edu.umd.util.evaluation.Measurement;
 
 /**
  *
