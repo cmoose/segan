@@ -7,19 +7,19 @@ import os.path
 import subprocess
 
 basepath = '/Users/chris/School/UMCP/LING848-F15/final_project'
-seganpath = '/Users/chris/School/UMCP/LING848-F15/segan'
+seganpath = '/Users/chris/git/segan'
 segan_input_path = 'data/gao/segan_preprocess'
 segan_output_path = 'data/gao/segan_results'
 
 
 def run_all(models, k_topics):
     options = {}
-    options['LDA'] = {'main': 'sampler.unsupervised.LDA'}
+    options['LDA'] = {'main': 'edu.umd.sampler.unsupervised.LDA'}
 
-    options['SLDA'] = {'main': 'sampler.supervised.regression.SLDA'}
+    options['SLDA'] = {'main': 'edu.umd.sampler.supervised.regression.SLDA'}
     options['SLDA']['other'] = '--init random -v -d -train'
 
-    options['SNLDA'] = {'main': 'sampler.supervised.regression.SNLDA'}
+    options['SNLDA'] = {'main': 'edu.umd.sampler.supervised.regression.SNLDA'}
     options['SNLDA']['custom'] = {}
     options['SNLDA']['custom']['alphas'] = '0.1,0.1'
     options['SNLDA']['custom']['betas'] = '1.0,0.5,0.1'
@@ -30,7 +30,7 @@ def run_all(models, k_topics):
     options['SNLDA']['other'] = '--burnIn 50 --maxIter 100 --sampleLag 10 --report 5 --init random -v -d -train'
 
 
-    _cp = '-cp "{0}/dist/segan.jar:{0}/lib/*"'.format(seganpath)
+    _cp = '-cp "{0}/target/segan-1.0-SNAPSHOT.jar:{0}/lib/*"'.format(seganpath)
     common_opts = []
     common_opts.append('--dataset gao')
     common_opts.append('--word-voc-file {0}/gao.wvoc'.format(os.path.join(basepath,segan_input_path)))
@@ -63,7 +63,7 @@ def run_all(models, k_topics):
             if options[model].has_key('other'):
                 cmd.append(options[model]['other'])
 
-            print cmd
+            print "Running: " + " ".join(cmd)
 
             #Actually run
             p = subprocess.Popen(" ".join(cmd), shell=True, cwd=seganpath, stdout=subprocess.PIPE)
@@ -78,5 +78,6 @@ def run_single_lda(k_topic):
 if __name__ == '__main__':
     models = ['LDA', 'SLDA', 'SNLDA']
     k_topics = [8, 35] #All possible topic numbers
-    run_all(models, k_topics)
+    #run_all(models, k_topics)
+    run_single_lda(35)
 

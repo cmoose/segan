@@ -48,8 +48,8 @@ def create_segan_preprocessed_files(type):
 
 
 def run_segan_preprocessing():
-    main = 'edu.umd.data.ResponseTextDataset'
-    #main = 'edu.umd.data.CorenlpTextDataset'
+    #main = 'edu.umd.data.ResponseTextDataset'
+    main = 'edu.umd.data.CorenlpTextDataset'
     _cp = '-cp "{0}/target/segan-1.0-SNAPSHOT.jar:{0}/lib/*"'.format(seganpath)
     _dataset = '--dataset gao'
     _textdata = '--text-data {0}'.format(os.path.join(basepath, segan_output_path, 'text.txt'))
