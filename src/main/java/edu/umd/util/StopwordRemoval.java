@@ -341,7 +341,6 @@ public class StopwordRemoval {
         "parted",
         "parting",
         "parts",
-        "per",
         "perhaps",
         "place",
         "places",

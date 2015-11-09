@@ -53,6 +53,7 @@ public class CorenlpProcessor {
     public boolean filterStopwords = true; // whether stopwords are filtered
     public boolean lemmatization = false; // whether lemmatization should be performed
     public boolean createPOSphrases = false; // whether to create phrases based on POS regex
+    public String stopwordFile;
     // tools
     private CorenlpStopwordRemoval stopwordRemoval;
     public HashMap<String, Integer> termFreq;
@@ -78,7 +79,8 @@ public class CorenlpProcessor {
                 corp.docTypeCountCutoff,
                 corp.filterStopwords,
                 corp.lemmatization,
-                corp.createPOSphrases);
+                corp.createPOSphrases,
+                corp.stopwordFile);
     }
 
     public CorenlpProcessor(
@@ -93,7 +95,8 @@ public class CorenlpProcessor {
             int docTypeCountCutoff,
             boolean filterStopwords,
             boolean lemmatization,
-            boolean createPOSphrases) {
+            boolean createPOSphrases,
+            String stopwordFile) {
         this(unigramCountCutoff,
                 bigramCountCutoff,
                 bigramScoreCutoff,
@@ -106,7 +109,8 @@ public class CorenlpProcessor {
                 3,
                 filterStopwords,
                 lemmatization,
-                createPOSphrases);
+                createPOSphrases,
+                stopwordFile);
     }
 
     public CorenlpProcessor(
@@ -122,7 +126,8 @@ public class CorenlpProcessor {
             int minWordLength,
             boolean filterStopwords,
             boolean lemmatization,
-            boolean createPOSphrases) {
+            boolean createPOSphrases,
+            String stopwordFile) {
         this.excludeFromBigrams = new HashSet<String>();
 
         // settings
@@ -152,7 +157,13 @@ public class CorenlpProcessor {
         this.bigramFreq = new HashMap<String, Integer>();
         this.totalBigram = 0;
 
-        this.stopwordRemoval = new CorenlpStopwordRemoval();
+        if (stopwordFile == null) {
+            this.stopwordRemoval = new CorenlpStopwordRemoval();
+        } else {
+            this.stopwordFile = stopwordFile;
+            this.stopwordRemoval = new CorenlpStopwordRemoval(stopwordFile);
+        }
+
 
 
     }
@@ -173,6 +184,7 @@ public class CorenlpProcessor {
         str.append("Filter stopwords:\t").append(filterStopwords).append("\n");
         str.append("Lemmatization:\t").append(lemmatization).append("\n");
         str.append("POS phrasing:\t").append(createPOSphrases).append("\n");
+        str.append("Stopword file:\t").append(stopwordFile).append("\n");
         return str.toString();
     }
 
@@ -294,13 +306,23 @@ public class CorenlpProcessor {
                     for (CoreLabel token : sentenceLemmas) {
                         String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
                         String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-                        if (!stopwordRemoval.isStopword(lemma.toLowerCase()) && !pos_punct.contains(pos)) {
-                            finalSentTokenList.add(token);
-                            MiscUtils.incrementMap(docTokens, lemma);
+                        if (filterStopwords) {
+                            if (!stopwordRemoval.isStopword(lemma.toLowerCase()) && !pos_punct.contains(pos)) {
+                                finalSentTokenList.add(token);
+                                MiscUtils.incrementMap(docTokens, lemma);
 
+                            }
+                        } else {
+                            if (!pos_punct.contains(pos)) {
+                                finalSentTokenList.add(token);
+                                MiscUtils.incrementMap(docTokens, lemma);
+                            }
                         }
 
+
                     }
+
+
 
                     //Add # of sent tokens to doc list
                     numDocTokens = docTokens.size();

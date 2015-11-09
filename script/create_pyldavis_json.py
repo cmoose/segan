@@ -9,9 +9,12 @@ import os.path
 import pickle
 import json
 
-basepath = '/Users/chris/School/UMCP/LING848-F15/final_project/data/gao'
-preprocesspath = 'segan_preprocess'
-modelresultspath = 'segan_results/RANDOM_LDA_K-35_B-500_M-1000_L-50_a-0.1_b-0.1_opt-false'
+datafolder_name = 'data'
+dataset_name = 'gao'
+basepath = '/Users/chris/School/UMCP/LING848-F15/final_project/{0}/{1}'.format(datafolder_name, dataset_name)
+preprocessor_type = 'phrases'
+preprocesspath = 'segan_preprocess/{0}'.format(preprocessor_type)
+modelresultspath = 'segan_results/{0}/RANDOM_LDA_K-35_B-500_M-1000_L-50_a-0.1_b-0.1_opt-false'.format(preprocessor_type)
 
 def load_vocab(fh):
     vocab = []
@@ -90,8 +93,8 @@ def create_json(data):
 def main():
     fh_phi = open(os.path.join(basepath, modelresultspath, 'phis.txt'))
     fh_theta = open(os.path.join(basepath, modelresultspath, 'thetas.txt'))
-    fh_vocab = open(os.path.join(basepath, preprocesspath, 'gao.wvoc'))
-    fh_tf = open(os.path.join(basepath, preprocesspath, 'gao.dat'))
+    fh_vocab = open(os.path.join(basepath, preprocesspath, '{0}.wvoc'.format(dataset_name)))
+    fh_tf = open(os.path.join(basepath, preprocesspath, '{0}.dat'.format(dataset_name)))
 
     phis = load_phis(fh_phi)
     thetas = load_thetas(fh_theta)

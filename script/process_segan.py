@@ -8,8 +8,11 @@ import subprocess
 
 basepath = '/Users/chris/School/UMCP/LING848-F15/final_project'
 seganpath = '/Users/chris/git/segan'
-segan_input_path = 'data/gao/segan_preprocess'
-segan_output_path = 'data/gao/segan_results'
+datafolder_name = 'data'
+dataset_name = 'gao'
+preprocessor_type = 'phrases'
+segan_input_path = '{0}/{1}/segan_preprocess/{2}'.format(datafolder_name, dataset_name, preprocessor_type)
+segan_output_path = '{0}/{1}/segan_results/{2}'.format(datafolder_name, dataset_name, preprocessor_type)
 
 
 def run_all(models, k_topics):
@@ -32,10 +35,10 @@ def run_all(models, k_topics):
 
     _cp = '-cp "{0}/target/segan-1.0-SNAPSHOT.jar:{0}/lib/*"'.format(seganpath)
     common_opts = []
-    common_opts.append('--dataset gao')
-    common_opts.append('--word-voc-file {0}/gao.wvoc'.format(os.path.join(basepath,segan_input_path)))
-    common_opts.append('--word-file {0}/gao.dat'.format(os.path.join(basepath,segan_input_path)))
-    common_opts.append('--info-file {0}/gao.docinfo'.format(os.path.join(basepath,segan_input_path)))
+    common_opts.append('--dataset {0}'.format(dataset_name))
+    common_opts.append('--word-voc-file {0}/{1}.wvoc'.format(os.path.join(basepath,segan_input_path), dataset_name))
+    common_opts.append('--word-file {0}/{1}.dat'.format(os.path.join(basepath,segan_input_path), dataset_name))
+    common_opts.append('--info-file {0}/{1}.docinfo'.format(os.path.join(basepath,segan_input_path), dataset_name))
     common_opts.append('--output-folder {0}'.format(os.path.join(basepath, segan_output_path)))
 
     for model in models:
@@ -76,8 +79,9 @@ def run_single_lda(k_topic):
 
 
 if __name__ == '__main__':
-    models = ['LDA', 'SLDA', 'SNLDA']
-    k_topics = [8, 35] #All possible topic numbers
-    #run_all(models, k_topics)
-    run_single_lda(35)
+    #models = ['LDA', 'SLDA', 'SNLDA']
+    models = ['LDA']
+    k_topics = [60] #All possible topic numbers
+    run_all(models, k_topics)
+    #run_single_lda(35)
 

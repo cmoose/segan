@@ -167,6 +167,7 @@ public class CorenlpTextDataset extends TextDataset {
         return str.toString();
     }
 
+
     public static CorenlpProcessor createCorenlpProcessor() {
         int unigramCountCutoff = CLIUtils.getIntegerArgument(cmd, "u", 1);
         int bigramCountCutoff = CLIUtils.getIntegerArgument(cmd, "b", 1);
@@ -178,9 +179,17 @@ public class CorenlpTextDataset extends TextDataset {
         int vocDocFreqMaxCutoff = CLIUtils.getIntegerArgument(cmd, "max-df", Integer.MAX_VALUE);
         int docTypeCountCutoff = CLIUtils.getIntegerArgument(cmd, "min-doc-length", 1);
 
-        boolean stopwordFilter = cmd.hasOption("s");
         boolean lemmatization = cmd.hasOption("l");
         boolean createPOSphrases = cmd.hasOption("p");
+
+        String stopwordFile = cmd.getOptionValue("stopword-file");
+        boolean stopwordFilter;
+        if (stopwordFile != null) {
+            //Autoset stopword filter boolean if we give a stopword file
+            stopwordFilter = true;
+        } else {
+            stopwordFilter = cmd.hasOption("s");
+        }
 
         CorenlpProcessor corpProc = new CorenlpProcessor(
                 unigramCountCutoff,
@@ -194,7 +203,8 @@ public class CorenlpTextDataset extends TextDataset {
                 docTypeCountCutoff,
                 stopwordFilter,
                 lemmatization,
-                createPOSphrases);
+                createPOSphrases,
+                stopwordFile);
         // If the word vocab file is given, use it. This is usually for the case
         // where training data have been processed and now test data are processed
         // using the word vocab from the training data.
@@ -236,6 +246,7 @@ public class CorenlpTextDataset extends TextDataset {
             options.addOption("d", false, "Debug");
             options.addOption("help", false, "Help");
             options.addOption("p", false, "POS Phrasing");
+            addOption("stopword-file", "Location of the stopword file");
 
             cmd = parser.parse(options, args);
             if (cmd.hasOption("help")) {
@@ -286,6 +297,7 @@ public class CorenlpTextDataset extends TextDataset {
         String responseFile = cmd.getOptionValue("response-file");
 
         CorenlpProcessor corenlpProc = createCorenlpProcessor();
+
         CorenlpTextDataset dataset = new CorenlpTextDataset(datasetName, datasetFolder);
         dataset.setFormatFilename(formatFile);
 
