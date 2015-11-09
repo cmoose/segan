@@ -13,11 +13,17 @@ dataset_name = 'gao'
 preprocessor_type = 'phrases'
 segan_input_path = '{0}/{1}/segan_preprocess/{2}'.format(datafolder_name, dataset_name, preprocessor_type)
 segan_output_path = '{0}/{1}/segan_results/{2}'.format(datafolder_name, dataset_name, preprocessor_type)
-
+prior_topic_file = os.path.join(basepath, segan_output_path, 'RANDOM_LDA_K-35_B-500_M-1000_L-50_a-0.1_b-0.1_opt-false/', 'new_phis.txt')
 
 def run_all(models, k_topics):
     options = {}
     options['LDA'] = {'main': 'edu.umd.sampler.unsupervised.LDA'}
+    options['LDA']['custom'] = {}
+    #Used for re-running model with a manually modified set of topics (topic/word distributions)
+    options['LDA']['custom']['prior-topic-file'] = prior_topic_file
+    options['LDA']['custom']['alpha'] = '100'
+    options['LDA']['custom']['beta'] = '100'
+    options['LDA']['other'] = '--init preset -v'
 
     options['SLDA'] = {'main': 'edu.umd.sampler.supervised.regression.SLDA'}
     options['SLDA']['other'] = '--init random -v -d -train'
@@ -59,7 +65,7 @@ def run_all(models, k_topics):
 
             #Add custom
             if options[model].has_key('custom'):
-                custom = " ".join(["--%s %s" % (k,v) for k, v in options[model]['custom'].items()])
+                custom = " ".join(["--%s %s" % (k,v) for k, v in options[model]['custom'].items() if v])
                 cmd.append(custom)
 
             #Add remaining options
@@ -81,7 +87,7 @@ def run_single_lda(k_topic):
 if __name__ == '__main__':
     #models = ['LDA', 'SLDA', 'SNLDA']
     models = ['LDA']
-    k_topics = [60] #All possible topic numbers
+    k_topics = [30] #All possible topic numbers
     run_all(models, k_topics)
     #run_single_lda(35)
 
