@@ -13,31 +13,40 @@ dataset_name = 'gao'
 preprocessor_type = 'phrases'
 segan_input_path = '{0}/{1}/segan_preprocess/{2}'.format(datafolder_name, dataset_name, preprocessor_type)
 segan_output_path = '{0}/{1}/segan_results/{2}'.format(datafolder_name, dataset_name, preprocessor_type)
-prior_topic_file = os.path.join(basepath, segan_output_path, 'RANDOM_LDA_K-35_B-500_M-1000_L-50_a-0.1_b-0.1_opt-false/', 'new_phis.txt')
+prior_topic_file = os.path.join(basepath, segan_output_path, 'RANDOM_LDA_K-35_B-500_M-1000_L-50_a-0.1_b-0.1_opt-false', 'new_phis.txt')
 
-def run_all(models, k_topics):
+def run_all(models, k_topics, custom_opts = {}):
     options = {}
-    options['LDA'] = {'main': 'edu.umd.sampler.unsupervised.LDA'}
-    options['LDA']['custom'] = {}
-    #Used for re-running model with a manually modified set of topics (topic/word distributions)
-    options['LDA']['custom']['prior-topic-file'] = prior_topic_file
-    options['LDA']['custom']['alpha'] = '100'
-    options['LDA']['custom']['beta'] = '100'
-    options['LDA']['other'] = '--init preset -v'
 
+    #LDA parameters
+    options['LDA'] = {'main': 'edu.umd.sampler.unsupervised.LDA'}
+    if custom_opts.has_key('LDA'):
+        options['LDA']['custom'] = custom_opts['LDA']['custom']
+    else:
+        options['LDA']['custom'] = {}
+        options['LDA']['custom']['alpha'] = '100'
+        options['LDA']['custom']['beta'] = '100'
+    options['LDA']['other'] = '--init preset -v --burnIn 100'
+
+    #SLDA parameters
     options['SLDA'] = {'main': 'edu.umd.sampler.supervised.regression.SLDA'}
+    if custom_opts.has_key('SLDA'):
+        options['SLDA']['custom'] = custom_opts['SLDA']
     options['SLDA']['other'] = '--init random -v -d -train'
 
+    #SNLDA parameters
     options['SNLDA'] = {'main': 'edu.umd.sampler.supervised.regression.SNLDA'}
-    options['SNLDA']['custom'] = {}
-    options['SNLDA']['custom']['alphas'] = '0.1,0.1'
-    options['SNLDA']['custom']['betas'] = '1.0,0.5,0.1'
-    options['SNLDA']['custom']['pis'] = '0.2,0.2'
-    options['SNLDA']['custom']['gammas'] = '100,10'
-    options['SNLDA']['custom']['mu'] = '0.0'
-    options['SNLDA']['custom']['sigmas'] = '0.01,2.5,5.0'
+    if custom_opts.has_key('SNLDA'):
+        options['SNLDA']['custom'] = custom_opts['SNLDA']
+    else:
+        options['SNLDA']['custom'] = {}
+        options['SNLDA']['custom']['alphas'] = '0.1,0.1'
+        options['SNLDA']['custom']['betas'] = '1.0,0.5,0.1'
+        options['SNLDA']['custom']['pis'] = '0.2,0.2'
+        options['SNLDA']['custom']['gammas'] = '100,10'
+        options['SNLDA']['custom']['mu'] = '0.0'
+        options['SNLDA']['custom']['sigmas'] = '0.01,2.5,5.0'
     options['SNLDA']['other'] = '--burnIn 50 --maxIter 100 --sampleLag 10 --report 5 --init random -v -d -train'
-
 
     _cp = '-cp "{0}/target/segan-1.0-SNAPSHOT.jar:{0}/lib/*"'.format(seganpath)
     common_opts = []
