@@ -6,6 +6,8 @@
 ## Build
 To build the latest code:
 
+- clone repo: `git clone git@github.com:cmoose/segan.git`
+- `cd segan`
 - push lass4j file to local maven repo
   - run `mvn install:install-file -Dfile=./lib/lasso4j-1.0.jar -DgroupId=edu.uci -DartifactId=lasso -Dversion=1.0 -Dpackaging=jar`
 - run `mvn install`
