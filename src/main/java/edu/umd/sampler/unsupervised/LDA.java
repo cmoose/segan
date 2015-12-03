@@ -39,6 +39,7 @@ public class LDA extends AbstractSampler {
     protected DirMult[] docTopics;
     protected DirMult[] topicWords;
     protected int[][] z;
+    protected String priorTopicFile;
 
     public LDA() {
         this.basename = "LDA";
@@ -103,8 +104,10 @@ public class LDA extends AbstractSampler {
                 + "_M-" + MAX_ITER
                 + "_L-" + LAG
                 + "_a-" + formatter.format(hyperparams.get(ALPHA))
-                + "_b-" + formatter.format(hyperparams.get(BETA))
-                + "_opt-" + this.paramOptimized;
+                + "_b-" + formatter.format(hyperparams.get(BETA));
+        if (this.priorTopicFile != null) {
+            this.name += "_reprocess";
+        }
     }
 
     /**
@@ -751,6 +754,13 @@ public class LDA extends AbstractSampler {
         sampler.setReport(true);
         sampler.setWordVocab(data.getWordVocab());
 
+        double[][] priorTopics = null;
+        if (cmd.hasOption("prior-topic-file")) {
+            String priorTopicFile = cmd.getOptionValue("prior-topic-file");
+            sampler.priorTopicFile = priorTopicFile;
+            priorTopics = IOUtils.input2DArray(new File(priorTopicFile));
+        }
+
         sampler.configure(outputFolder, V, K,
                 alpha, beta,
                 initState, paramOpt,
@@ -772,12 +782,6 @@ public class LDA extends AbstractSampler {
                 selectedDocIndices.add(Integer.parseInt(line));
             }
             reader.close();
-        }
-
-        double[][] priorTopics = null;
-        if (cmd.hasOption("prior-topic-file")) {
-            String priorTopicFile = cmd.getOptionValue("prior-topic-file");
-            priorTopics = IOUtils.input2DArray(new File(priorTopicFile));
         }
 
         sampler.train(data.getWords(), selectedDocIndices);

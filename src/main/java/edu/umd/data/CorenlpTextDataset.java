@@ -67,14 +67,6 @@ public class CorenlpTextDataset extends TextDataset {
         return res;
     }
 
-    public ZNormalizer zNormalize() {
-        ZNormalizer znorm = new ZNormalizer(responses);
-        for (int ii = 0; ii < responses.length; ii++) {
-            responses[ii] = znorm.normalize(responses[ii]);
-        }
-        return znorm;
-    }
-
     public void loadResponses(String responseFilepath) throws Exception {
         if (verbose) {
             logln("--- Loading response from file " + responseFilepath);
@@ -116,15 +108,18 @@ public class CorenlpTextDataset extends TextDataset {
 
         BufferedWriter infoWriter = IOUtils.getBufferedWriter(outputFile);
         for (int docIndex : this.processedDocIndices) {
-            infoWriter.write(this.docIdList.get(docIndex)
-                    + "\t" + this.responses[docIndex]
-                    + "\n");
+            String line = this.docIdList.get(docIndex);
+            if (this.responses != null) {
+                line += "\t" + this.responses[docIndex];
+            }
+            infoWriter.write(line + "\n");
+
         }
         infoWriter.close();
     }
 
     @Override
-    public void inputDocumentInfo(File filepath) throws Exception {
+    public void inputDocumentInfo(File filepath) throws Exception { //Currently not used I think
         if (verbose) {
             logln("--- Reading document info from " + filepath);
         }
@@ -147,6 +142,12 @@ public class CorenlpTextDataset extends TextDataset {
         for (int i = 0; i < this.responses.length; i++) {
             this.responses[i] = responseList.get(i);
         }
+    }
+
+
+    @Override
+    public String getDatasetFolderPath() {
+        return new File(this.folder).getAbsolutePath();
     }
 
 
@@ -233,20 +234,15 @@ public class CorenlpTextDataset extends TextDataset {
 
             // directories
             addDataDirectoryOptions();
-            addOption("response-file", "Directory of the response file");
 
             // text processing
             addCorpusProcessorOptions();
 
-            // cross validation
-            addCrossValidationOptions();
-
             addOption("run-mode", "Run mode");
+            addOption("stopword-file", "Location of the stopword file");
             options.addOption("v", false, "Verbose");
             options.addOption("d", false, "Debug");
             options.addOption("help", false, "Help");
-            options.addOption("p", false, "POS Phrasing");
-            addOption("stopword-file", "Location of the stopword file");
 
             cmd = parser.parse(options, args);
             if (cmd.hasOption("help")) {
@@ -276,30 +272,39 @@ public class CorenlpTextDataset extends TextDataset {
         }
     }
 
+    public static void addDataDirectoryOptions() {
+        addOption("dataset-name", "Dataset Name");
+        addOption("output-folder", "Folder that stores the processed data");
+        addOption("input-text-data", "Directory of the input text data");
+        addOption("word-voc-file", "Directory of the word vocab file (if any)");
+        addOption("response-file", "Directory of the response.txt file (if any)");
+    }
+
+    public static void addCorpusProcessorOptions() {
+        options.addOption("sent", false, "Whether sentences are outputed");
+        options.addOption("s", false, "Whether stopwords are filtered");
+        options.addOption("p", false, "Whether to do Part Of Speech Phrasing");
+    }
+
+
     private static CorenlpTextDataset load() throws Exception {
-        String datasetName = cmd.getOptionValue("dataset");
-        String datasetFolder = cmd.getOptionValue("data-folder");
-        String formatFolder = cmd.getOptionValue("format-folder");
-        String formatFile = CLIUtils.getStringArgument(cmd, "format-file", datasetName);
+        String datasetName = cmd.getOptionValue("dataset-name");
+        String datasetFolder = cmd.getOptionValue("output-folder");
 
         CorenlpTextDataset data = new CorenlpTextDataset(datasetName, datasetFolder);
-        data.setFormatFilename(formatFile);
-        data.loadFormattedData(new File(data.getDatasetFolderPath(), formatFolder));
+        data.loadFormattedData(new File(data.getDatasetFolderPath()));
         return data;
     }
 
     private static void process() throws Exception {
-        String datasetName = cmd.getOptionValue("dataset");
-        String datasetFolder = cmd.getOptionValue("data-folder");
-        String textInputData = cmd.getOptionValue("text-data");
-        String formatFolder = cmd.getOptionValue("format-folder");
-        String formatFile = CLIUtils.getStringArgument(cmd, "format-file", datasetName);
+        String datasetName = cmd.getOptionValue("dataset-name");
+        String datasetFolder = cmd.getOptionValue("output-folder");
+        String textInputData = cmd.getOptionValue("input-text-data");
         String responseFile = cmd.getOptionValue("response-file");
 
         CorenlpProcessor corenlpProc = createCorenlpProcessor();
 
         CorenlpTextDataset dataset = new CorenlpTextDataset(datasetName, datasetFolder);
-        dataset.setFormatFilename(formatFile);
 
         // load text data
         File textPath = new File(textInputData);
@@ -310,10 +315,14 @@ public class CorenlpTextDataset extends TextDataset {
         } else {
             throw new RuntimeException(textInputData + " is neither a file nor a folder");
         }
-        dataset.loadResponses(responseFile); // load response data
+        if (responseFile != null) {
+            dataset.loadResponses(responseFile); // load response data
+        }
+
         dataset.setHasSentences(cmd.hasOption("sent"));
 
-        File outputFolder_fh = new File(dataset.getDatasetFolderPath(), formatFolder);
+
+        File outputFolder_fh = new File(dataset.getDatasetFolderPath());
         String outputFolder = outputFolder_fh.getAbsolutePath();
 
         if (verbose) {
