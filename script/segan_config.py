@@ -19,7 +19,7 @@ class SeganConfig:
             self.base_path = yml_cnf['globals']['basepath']
             self.segan_bin_path = yml_cnf['globals']['seganbinpath']
             self.dataset_name = yml_cnf['globals']['datasetname']
-            self.javaclasspath = '{0}/target/segan-1.0-SNAPSHOT.jar:{0}/lib/*'.format(self.segan_bin_path)
+            self.javaclasspath = '{0}/target/segan-1.0-SNAPSHOT.jar:{0}/target/lib/*'.format(self.segan_bin_path)
 
             #preprocessing
             self.preprocess = {}
