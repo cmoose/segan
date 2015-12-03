@@ -16,6 +16,7 @@ To make life easier, we've created a yaml configuration file containing all opti
 
 ## Preprocessing
 Segan supports preprocessing your text, which builds a vocabulary file, plus counts of tokens needed for running the models. Segan requires your text to be in one of two possible formats:  
+
 1. As a single text file
   - where each line is a document of the format `<docid>\tab<doctext>`
 2. As a directory containing text files
@@ -34,7 +35,7 @@ Segan supports multiple models.
 4. HDP
 
 To run:  
-* run `python script/process_segan.py`
+1. run `python script/process_segan.py`
   * (runs LDA/K=35 by default) - open the file to change these defaults
 
 ## Using the topic editor
