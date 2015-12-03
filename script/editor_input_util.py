@@ -7,13 +7,8 @@
 import os.path
 import json
 import heapq
+import segan_config
 
-datafolder_name = 'data'
-dataset_name = 'gao'
-basepath = '/Users/chris/School/UMCP/LING848-F15/final_project/{0}/{1}'.format(datafolder_name, dataset_name)
-preprocessor_type = 'phrases'
-preprocesspath = 'segan_preprocess/{0}'.format(preprocessor_type)
-modelresultspath = 'segan_results/{0}/RANDOM_LDA_K-35_B-500_M-1000_L-50_a-0.1_b-0.1_opt-false'.format(preprocessor_type)
 
 def load_vocab(fh):
     vocab = []
@@ -96,12 +91,18 @@ def get_top100_docs(thetas, num_topics):
 
 
 def main():
+    config = segan_config.SeganConfig()
+    #Note: Only works with LDA at the moment
+    modelresultspath = config.process['LDA']['modelresultspath']
+
     #File handlers of raw data
-    fh_phi = open(os.path.join(basepath, modelresultspath, 'phis.txt'))
-    fh_theta = open(os.path.join(basepath, modelresultspath, 'thetas.txt'))
-    fh_vocab = open(os.path.join(basepath, preprocesspath, '{0}.wvoc'.format(dataset_name)))
-    #fh_tf = open(os.path.join(basepath, preprocesspath, '{0}.dat'.format(dataset_name)))
-    fh_docs_txt = open(os.path.join(basepath, preprocesspath, '../text.txt'))
+    fh_phi = open(os.path.join(config.process['output_path'], modelresultspath, 'phis.txt'))
+    fh_theta = open(os.path.join(config.process['output_path'], modelresultspath, 'thetas.txt'))
+    fh_vocab = open(os.path.join(config.base_path, config.preprocess['output_path'], '{0}.wvoc'.format(config.dataset_name)))
+    if os.path.isfile(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt')):
+        fh_docs_txt = open(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt'))
+    else:
+        print "ERROR: Can't find document text files..."
 
     #Load raw data
     phis = load_phis(fh_phi)
@@ -124,9 +125,10 @@ def main():
             'doc_txt': txt_data}
 
     #Write data to disk
-    fhw = open(os.path.join(basepath, modelresultspath, 'vocab.json'), 'wb')
+    print "Writing json to {0}".format(os.path.join(config.process['output_path'], modelresultspath, 'data.json'))
+    fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'vocab.json'), 'wb')
     json.dump(vocab, fhw)
-    fhw = open(os.path.join(basepath, modelresultspath, 'data.json'), 'wb')
+    fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'data.json'), 'wb')
     json.dump(data, fhw)
 
 if __name__ == '__main__':

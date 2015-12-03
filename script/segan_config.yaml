@@ -1,0 +1,105 @@
+# Main configuration file for driving segan through python
+# This includes preprocessing, processing (running model), and
+# converting topic editor file formats.
+#
+# Most of the default values are sane, so you will probably only need
+# to modify variables of paths, pointing to your data and output
+
+#Globals
+globals:
+  #Required: base path for all processing
+  basepath: /Users/chris/School/UMCP/LING848-F15/project
+
+  #Required: path to segan binaries
+  seganbinpath: /Users/chris/git/segan
+
+  #Required: name your dataset
+  datasetname: gao
+
+
+#Prepares data for LDA/SLDA/SNLDA
+preprocess:
+  #Required: entry point class edu.umd.data.[CorenlpTextDataset, ResponseTextDataset]
+  main: edu.umd.data.CorenlpTextDataset
+
+  #Optional: whether to preprocess with POS phrasing
+  phrases: false
+
+  #Required: path to text.txt or data folder, relative to basepath
+  inputfolderpath: data/raw_data
+
+  #Optional: path to response.txt file (for SLDA, SNLDA)
+  responsefilepath:
+
+  #Required: where preprocessing output will be saved to, relative to basepath
+  outputfolderpath: data/segan_preprocess/unigrams
+
+  #Optional: custom stopword file, relative to basepath
+  stopwordfilepath: data/segan_preprocess/stopwords.txt
+
+  other: --run-mode process -v -d -s
+
+
+#Runs models (LDA/SLDA/SNLDA)
+process:
+  #Required: path to .dat, .docinfo, .wvoc files, relative to basepath
+  inputfolderpath: data/segan_preprocess/unigrams
+
+  #Required: path to store LDA results, relative to basepath
+  outputfolderpath: data/segan_results/unigrams
+
+  #Whether to run verbose and in debug mode
+  verbosedebug: -v -d
+
+  #Forms model results path: RANDOM_LDA_K-35_B-500_M-1000_L-50_a-0.1_b-0.1_opt-false
+  options:
+    defaultmodel: LDA   #[LDA, SLDA, SNLDA]
+    defaultK: 35        #Required: number of topics
+
+  #Individual model options here
+  LDA:
+    main: edu.umd.sampler.unsupervised.LDA
+    custom:
+      init: random    #Initialization type: [RANDOM, SEEDED, FORWARD, PRESET, PRIOR]
+      alpha: 0.1      #alpha-hyperparam
+      beta: 0.1       #beta-hyperparam
+      burnIn: 500     #Burn-in
+      maxIter: 1000   #max-iterations
+      sampleLag: 50   #Lag
+    other:
+
+  SLDA:
+    main: edu.umd.sampler.supervised.regression.SLDA
+    custom:
+      init: random #Initialization type: [RANDOM, SEEDED, FORWARD, PRESET, PRIOR]
+      alpha: 0.1
+      beta: 0.1
+      burnIn: 500
+      maxIter: 1000
+      sampleLag: 50
+    other: -train
+
+  SNLDA:
+    main: edu.umd.sampler.supervised.regression.SNLDA
+    custom:
+      init: random #Initialization type: [RANDOM, SEEDED, FORWARD, PRESET, PRIOR]
+      alphas: 0.1,0.1
+      betas: 1.0,0.5,0.1
+      pis: 0.2,0.2
+      gammas: 100,10
+      mu: 0.0
+      sigmas: 0.01,2.5,5.0
+      sampleLag: 10
+    other: -train --report 5
+
+
+#Options for re-processing LDA model using updated phi
+reprocess:
+  LDA:
+    custom:
+      #Path relative to LDA model results path
+      priortopicfile: new_phis.txt
+
+
+#Options for topic editor
+editor:
