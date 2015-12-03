@@ -1,185 +1,55 @@
 # Setup
-## Check out
-```
-git clone git@github.com:vietansegan/segan.git
-```
+## Prerequisites
+- maven
+- python yaml module (to drive segan from python)
 
 ## Build
 To build the latest code:
 
-- `ant jar`: to build `dist/segan.jar`
-- `ant clean-build`: to make a clean build
+- push lass4j file to local maven repo
+..- `mvn install:install-file -Dfile=./lib/lasso4j-1.0.jar -DgroupId=edu.uci -DartifactId=lasso -Dversion=1.0 -Dpackaging=jar`
+- `mvn install` - This will build a `segan-1.0-SNAPSHOT.jar` in folder `target`
 
-Take a look at the `build.xml` for more options.
+## segan config file
+To make life easier, we've created a yaml configuration file containing all options available to preprocessing, processing, and reprocessing in segan. The file is located in `script/segan_config.yaml`. Currently, it is only used by the python driver, not segan itself.
 
-A `segan-YYYYMMDD.jar` file for a "stable" version is provided in folder `dist`. If you use this existing `jar` file, replace `segan.jar` with `segan-YYYYMMDD.jar` in all command lines below.
+## Preprocessing
+Segan supports preprocessing your text, which builds a vocabulary file, plus counts of tokens needed for running the models. Segan requires your text to be in one of two possible formats:
+1. As a single text file
+..* where each line is a document of the format `<docid>\tab<doctext>`
+2. As a directory containing text files
+..* where each file is a document named `<docid>.txt` and the contents contain the doc text.
+### Running Preprocessing
+* Configure segan_config.yaml to use the desired directories/files
+* `python script/preprocess_segan.py`
 
-# LDA
-```
-java -cp "$SEGAN_PATH/dist/segan.jar:$SEGAN_PATH/lib/*" sampler.unsupervised.LDA --dataset <dataset-name> --word-voc-file <word-vocab-file> --word-file <doc-word-file> --info-file <doc-info-file> --output-folder <output-folder> --burnIn <number-burn-in-iterations> --maxIter <max-number-iterations> --sampleLag <sample-lag> --report <report-interval> --K <number-topics> --alpha <alpha> --beta <beta>
-```
+## Processing
+Segan supports multiple models.
+1. LDA
+2. SLDA
+3. SNLDA
+4. HDP
+To run:
+* `python script/process_segan.py`
+..*(runs LDA/K=35 by default) - open the file to change these defaults
 
-# HDP
-```
-java -cp "$SEGAN_PATH/dist/segan.jar:$SEGAN_PATH/lib/*" sampler.unsupervised.HDP --dataset <dataset-name> --word-voc-file <word-vocab-file> --word-file <doc-word-file> --info-file <doc-info-file> --output-folder <output-folder> --burnIn <number-burn-in-iterations> --maxIter <max-number-iterations> --sampleLag <sample-lag> --report <report-interval> --K <initial-num-topics> --global-alpha <global-alpha> --local-alpha <local-alpha> --beta <beta> --init <initialization>
-```
+## Using the topic editor
+We've built scripts to convert the outputs of LDA into a json file for viewing in distill-ery.
+To view in distill-ery:
+* `python script/editor_input_util.py` - creates the json file data.json and vocab.json from the outputs of processing
 
-# SLDA
-This provides an implementation of Supervised Latent Dirichlet allocation (Blei and McAuliffe, NIPS'07). SLDA's input is a set of documents, each of which is associated with a continuous response variable.
+## Reprocessing the topic editor export
+Once you complete making manual changes to your topics, we've created a script to create a new phis distribution needed to reprocess with segan. 
+To run:
+* `python script/editor_output_util.py`
+..* open this file to change the path where you stored exports.json
+* `python script/reprocess_segan.py`
 
-### Running SLDA
-```
-java -cp "$SEGAN_PATH/dist/segan.jar:$SEGAN_PATH/lib/*" sampler.supervised.regression.SLDA --dataset <dataset-name> --word-voc-file <word-vocab-file> --word-file <doc-word-file> --info-file <doc-info-file> --output-folder <output-folder> --burnIn <number-burn-in-iterations> --maxIter <max-number-iterations> --sampleLag <sample-lag> --report <report-interval> --K <number-topics> --alpha <alpha> --beta <beta> --rho <rho> --sigma <sigma> --mu <mu> --init <initialization>
-```
-
-- `<dataset-name>`: Name of the dataset
-- `<word-vocab-file>`: File contains the word vocabulary. Each word type is separated by a new line.
-- `<doc-word-file>`: File contains the formatted text of documents, which has the following format:
-```
-<num-word-types-doc-1> <word-type-1>:<frequency> <word-type-2>:<frequency> ...\n
-<num-word-types-doc-2> <word-type-1>:<frequency> <word-type-2>:<frequency> ...\n
-...
-<num-word-types-doc-D> <word-type-1>:<frequency> <word-type-2>:<frequency> ...\n
-```
-In `<doc-word-file>`, each line represents a document. The first number (e.g., `<num-word-types-doc-d>`) is the number of unique word types in the document. Subsequently, each pair `<word-type-1>:<frequency>` represents a word type and its frequency in the document.
-
-- `<doc-info-file>`: File contains the document IDs and their associated responses, which has the following format:
-```
-<doc-1-ID>\t<response-1>\n
-<doc-2-ID>\t<response-2>\n
-...
-<doc-D-ID>\t<response-D>\n
-```
-- `<output-folder>`: Folder to output results
-- `<number-burn-in-iterations>`: Number of burn-in iterations (default: 500)
-- `<max-number-iterations>`: Maximum number of iterations (default: 1000)
-- `<sample-lag>`: Sample lag (default: 50)
-- `<report-interval>`: Number of iterations between printing verbosely to console (default: 25)
-- `<number-topics>`: Number of topics (default: 50)
-- `<alpha>`: Document-topic Dirichlet hyperparameter (default: 0.1)
-- `<beta>`: Topic-word Dirichlet hyperparameter (default: 0.1)
-- `<rho>`: Variance of the Gaussian distribution for documents' responses (default: 1.0)
-- `<sigma>`: Variance of the Gaussian prior for topics' regression parameters (default: 1.0)
-- `<mu>`: Mean of the Gaussian prior for topics' regression parameters (default: 0.0)
-- `<initialization>`: Initialization of SLDA. There are current two options: (1) `random`: randomly assign topic to token (default) and (2) `preset`: run LDA for 100 iterations and use LDA's assignments for SLDA's initialization.
-- `-z`: Whether the documents' responses are z-normalized
-- `-v`: Verbose
-- `-d`: Debug
-
-### Processing data for SLDA
-You can either preprocess your raw data into the format described above to run SLDA or use the existing tool provided in `segan`. To process data using `segan`:
-```
-java -cp 'dist/segan.jar:dist/lib/*' data.ResponseTextDataset --dataset <dataset-name> --text-data <input-text> --data-folder <data-folder> --format-folder <format-folder> --run-mode process --response-file <response-file>
-```
-- `<dataset-name>`:	The name of the dataset
-- `<input-text>`:	Raw input documents. This can be either (1) a file in which each line is a document, or (2) a folder in which each file is a document. If `<input-text>` is a file, each line has to have the format `<doc_id>\t<doc_content>\n`. If `<input-text>` is a folder, each file stores the document text and the file name will be treated as the `doc_id`.
-- `<data-folder>`:	The folder where the processed data will be stored
-- `<format-folder>`:	The subfolder that the processed data will be stored. More specifically, after running this, the processed data will be stored in `<output-folder>/<dataset-name>/<format-folder>`.
-- `<format-file>`(optional): By default, all processed data files will be named `<dataset-name>.<extension>`, e.g., `<dataset-name>.dat`, `<dataset-name>.wvoc` etc. If you want to rename these formatted files to `<format-file>.dat`, `<format-file>.wvoc` etc, use this option.
-- `<response-file>`: File contains the documents' responses
-Other important input arguments:
-- `--u`: Minimum unigram frequency (default: 1)
-- `--b`: Minimum bigram frequency (default: 1)
-- `--bs`: Minimum bigram chi-squared score (default: 5)
-- `--V`: Maximum vocabulary size
-- `-s`: Whether stop words are filtered
-- `-l`: Whether stemming/lemmatization is performed
-- `-v`: Verbose
-- `-d`: Debug 
-
-### Running example
-```
-java -cp 'dist/segan.jar:lib/*' data.ResponseTextDataset --dataset amazon-data --text-data demo/amazon-data/raw/text.txt --response-file demo/amazon-data/raw/response.txt --data-folder demo --format-folder format-supervised --run-mode process -v -d --u 5 -s -l --bs 10 --b 5 --V 10000
-```
-
-```
-java -cp "dist/segan.jar:lib/*" sampler.supervised.regression.SLDA --dataset amazon-data --word-voc-file demo/amazon-data/format-supervised/amazon-data.wvoc --word-file demo/amazon-data/format-supervised/amazon-data.dat --info-file demo/amazon-data/format-supervised/amazon-data.docinfo --output-folder demo/amazon-data/supervised-models --burnIn 250 --maxIter 500 --sampleLag 25 --report 5 --K 50 --alpha 0.1 --beta 0.1 --rho 1.0 --sigma 1.0 --mu 0.0 --init random -v -d -z
-```
-
-Notes:
-- To avoid the Java Heap Space Errors, increase `-Xmx` and `-Xms`. For example, `-Xmx10000M -Xms10000M`.
-- For other input arguments, use `-help`. For example, `java -cp dist/segan.jar data.ResponseTextData -help`.
-- For each document in the input folder, the filename is used as its ID. If the filename has `txt` as the file extension, `txt` will be discarded. For example, a document stored in file `doc-1.txt` will have `doc-1` as its ID, whereas a document stored in file `doc-2.dat` will have `doc-2.dat` as its ID.
-
-# SNLDA
-SNLDA takes in the same input as SLDA to learn a hierarchy of topics instead of a flat topic structure in SLDA.
-
-Example cmd:
-```
-java -cp "dist/segan.jar:lib/*" sampler.supervised.regression.SNLDA --dataset amazon-data --word-voc-file demo/amazon-data/format-supervised/amazon-data.wvoc --word-file demo/amazon-data/format-supervised/amazon-data.dat --info-file demo/amazon-data/format-supervised/amazon-data.docinfo --output-folder demo/amazon-data/model-supervised  --Ks 15,4 --burnIn 50 --maxIter 100 --sampleLag 25 --report 5 --init random --alphas 0.1,0.1 --betas 1.0,0.5,0.1 --gamma-means 0.2,0.2 --gamma-scales 100,10 --rho 1.0 --mu 0.0 --sigma 2.5 -v -d -z
-```
-- `Ks`: The branching factors of the hierarchy. Default: [15, 4], i.e., the root node has 15 children nodes and each 1st-level node has 4 children nodes. This will given a tree of L=3 levels.
-- `alphas`: Dirichlet parameters of distribution over children nodes at each level. Default: [0.1, 0.1]. Array length = L-1.
-- `betas`: Dirichlet parameters of topics at each level. Default: [1.0, 0.5, 0.1]. Array length = L.
-- `gamma-means`: Means of the Beta priors at each level, specifying the prior probability that a token will stay at the current node. Default: [0.2, 0.2]. Array length = L-1.
-- `gamma-scales`: Scales of the Beta priors. Default: [100, 10]. Array length = L-1.
-- `rho`, `mu` and `signa` are similar to those in SLDA.
-
-# Binary SLDA
-SLDA for a set of documents, each of which is associated with a binary response variable (0 or 1). 
-### Running BinarySLDA
-```
-java -cp "$SEGAN_PATH/dist/segan.jar:$SEGAN_PATH/lib/*" sampler.supervised.classification.BinarySLDA --dataset <dataset-name> --word-voc-file <word-vocab-file> --word-file <doc-word-file> --info-file <doc-info-file> --output-folder <output-folder>
-```
-- `<dataset-name>`:	The name of the dataset
-- `<output-folder>`: Folder to output results
-- `<word-vocab-file>`: File contains the word vocabulary. Each word type is separated by a new line.
-- `<doc-word-file>`: File contains the formatted text of documents (see above).
-- `<doc-info-file>`: File contains the document IDs and their associated binary label.
-```
-<doc-1-ID>\t<label-1>\n
-<doc-2-ID>\t<label-2>\n
-...
-<doc-D-ID>\t<label-D>\n
-```
-In addition, here are optional inputs and their default values:
-- `--K`: Number of topics (default: 50)
-- `--burnIn`: Number of burn-in iterations (default: 500)
-- `--maxIter`: Maximum number of iterations (default: 1000)
-- `--sampleLag`: Sample lag (default: 50)
-- `--report`: Number of iterations between printing verbosely to console (default: 25)
-- `--alpha`: Document-topic Dirichlet hyperparameter (default: 0.1)
-- `--beta`: Topic-word Dirichlet hyperparameter (default: 0.1)
-- `--sigma`: Variance of the Gaussian prior for topics' regression parameters (default: 1.0)
-- `--mu`: Mean of the Gaussian prior for topics' regression parameters (default: 0.0)
-- `--init`: Initialization of SLDA. There are currently two options: 
- - `random`: randomly assign topic to token (default) 
- - `preset`: run LDA for 100 iterations and use LDA's assignments for SLDA's initialization.
-- `-v`: Verbose
-- `-d`: Debug
-
-### Processing data for BinarySLDA
-Example of input data for BinarySLDA is provided in folder `demo/amazon-data/format-binary`. You can either process your raw data into the same format as provided in `demo/amazon-data/format-binary`, or use `segan`'s processing tool.
-```
-java -cp "$SEGAN_PATH/dist/segan.jar:$SEGAN_PATH/lib/*" data.LabelTextDataset --dataset <dataset-name> --text-data <input-text> --data-folder <data-folder> --format-folder <format-folder> --run-mode process --label-file <label-file>
-```
-- `<dataset-name>`:	The name of the dataset
-- `<input-text>`:	Raw input documents. This can be either (1) a file in which each line is a document, or (2) a folder in which each file is a document. If `<input-text>` is a file, each line has to have the format `<doc_id>\t<doc_content>\n`. If `<input-text>` is a folder, each file stores the document text and the file name will be treated as the `doc_id`.
-- `<data-folder>`:	The folder where the processed data will be stored
-- `<format-folder>`:	The subfolder that the processed data will be stored. More specifically, after running this, the processed data will be stored in `<output-folder>/<dataset-name>/<format-folder>`.
-- `<format-file>`(optional): By default, all processed data files will be named `<dataset-name>.<extension>`, e.g., `<dataset-name>.dat`, `<dataset-name>.wvoc` etc. If you want to rename these formatted files to `<format-file>.dat`, `<format-file>.wvoc` etc, use this option.
-- `<label-file>`: File contains the documents' binary label
-Other important input arguments:
-- `--u`: Minimum unigram frequency (default: 1)
-- `--b`: Minimum bigram frequency (default: 1)
-- `--bs`: Minimum bigram chi-squared score (default: 5)
-- `--V`: Maximum vocabulary size
-- `-s`: Whether stop words are filtered
-- `-l`: Whether stemming/lemmatization is performed
-- `-v`: Verbose
-- `-d`: Debug 
-
-### Running example
-- To process raw data in `demo/amazon-data/raw` (`text.txt` and `binary-label.txt`) to formatted data in `demo/amazon-data/format-binary`:
-```
-java -cp 'dist/segan.jar:dist/lib/*' data.LabelTextDataset --dataset amazon-data --text-data demo/amazon-data/raw/text.txt --data-folder demo --format-folder format-binary --run-mode process --label-file demo/amazon-data/raw/binary-label.txt -v -d --u 5 -s -l --bs 10 --b 5 --V 10000
-```
-- To run BinarySLDA on formatted data in `demo/amazon-data/format-binary`:
-```
-java -cp "dist/segan.jar:lib/*" sampler.supervised.classification.BinarySLDA --dataset amazon-data --word-voc-file demo/amazon-data/format-binary/amazon-data.wvoc --word-file demo/amazon-data/format-binary/amazon-data.dat --info-file demo/amazon-data/format-binary/amazon-data.docinfo --output-folder demo/amazon-data/binary-supervised-models --burnIn 100 --maxIter 250 --sampleLag 30 --report 5 --K 50 --alpha 0.1 --beta 0.1 --sigma 1.0 --mu 0.0 --init random -v -d
-```
-
-# SHDP
-```
- java -cp "$SEGAN_PATH/dist/segan.jar:$SEGAN_PATH/lib/*" sampler.supervised.regression.SHDP --dataset <dataset-name> --word-voc-file <word-vocab-file> --word-file <doc-word-file> --info-file <doc-info-file> --output-folder <output-folder> --burnIn <number-burn-in-iterations> --maxIter <max-number-iterations> --sampleLag <sample-lag> --report <report-interval> --global-alpha <global-alpha> --local-alpha <local-alpha> --beta <beta> --rho <rho> --sigma <sigma> --mu <mu> --init <initialization>
-```
+## The entire pipeline
+1. Prepare your raw data
+2. modify script/segan_config.yaml where appropriate
+3. preprocess text
+4. process model(s)
+5. load into distill-ery
+6. export from distill-ery and reprocess through segan
+7. repeat if necessary...
