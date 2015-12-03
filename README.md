@@ -16,27 +16,28 @@ To make life easier, we've created a yaml configuration file containing all opti
 
 ## Preprocessing
 Segan supports preprocessing your text, which builds a vocabulary file, plus counts of tokens needed for running the models. Segan requires your text to be in one of two possible formats:  
-1. As a single text file
-  * where each line is a document of the format `<docid>\tab<doctext>`
-2. As a directory containing text files
+1. As a single text file  
+  * where each line is a document of the format `<docid>\tab<doctext>`  
+2. As a directory containing text files  
   * where each file is a document named `<docid>.txt` and the contents contain the doc text.
 
 ### Running Preprocessing
 1. Configure segan_config.yaml to use the desired directories/files
 2. run `python script/preprocess_segan.py`
 
-## Processing
-Segan supports multiple models.  
+## Processing  
+Segan supports multiple models. 
 1. LDA
 2. SLDA
 3. SNLDA
 4. HDP
-To run:
-* `python script/process_segan.py`
+
+To run:  
+* `python script/process_segan.py`  
   *(runs LDA/K=35 by default) - open the file to change these defaults
 
 ## Using the topic editor
-We've built scripts to convert the outputs of LDA into a json file for viewing in distill-ery.
+We've built scripts to convert the outputs of LDA into a json file for viewing in distill-ery.  
 To view in distill-ery:  
 * `python script/editor_input_util.py` - creates the json file data.json and vocab.json from the outputs of processing
 
@@ -54,4 +55,4 @@ To run:
 4. process model(s)
 5. load into distill-ery
 6. export from distill-ery and reprocess through segan
-7. repeat if necessary...
+7. repeat if necessary
