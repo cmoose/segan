@@ -1,38 +1,34 @@
-# Script to create json files containing phis, thetas, vocab, and docs text for editing with the
-# topic editor. Currently stores the top 100 docs and words per topic
+# Utility functions to convert output of mallet into form for distill-ery
 #
 # Author: Chris Musialek
-# Date: Oct 2015
+# Date: Dec 2015
+#
 
 import os.path
 import json
 import heapq
-import segan_config
 
 
-def load_vocab(fh):
-    vocab = []
-    for word in fh:
-        vocab.append(word.strip())
-    return vocab
-
-
-def load_phis(fh):
-    phis = []
-    fh.next() #first line is # of topics
-    for line in fh:
-        topic = [float(x) for x in line.split()[1:]]
-        phis.append(topic)
-    return phis
-
-
+#Doc-topic distributions
 def load_thetas(fh):
     thetas = []
-    fh.next() #first line is # of docs
     for line in fh:
-        doc = [float(x) for x in line.split()[1:]]
+        doc = [float(x) for x in line.split()[2:]]
         thetas.append(doc)
     return thetas
+
+
+def load_word_topics_weights(fh):
+    probs = {}
+    for line in fh:
+        l = line.strip().split('\t')
+        topic_id = int(l[0])
+        if not probs.has_key(topic_id):
+            probs[topic_id] = []
+        token = l[1]
+        raw_prob = float(l[2])
+        probs[topic_id].append(raw_prob)
+    return probs
 
 
 def load_txt_data(fh):
@@ -41,6 +37,22 @@ def load_txt_data(fh):
         a = line.split('\t')
         txt_data.append(a[1])
     return txt_data
+
+
+def load_vocab(fh):
+    vocab = []
+    for line in fh:
+        l = line.split()
+        vocab.append(l[1].strip())
+    return vocab
+
+
+def get_phis(word_topics_weights, vocab_size):
+    phis = []
+    for i in range(0,len(word_topics_weights)):
+        word_topic_dist = [float(x/vocab_size) for x in word_topics_weights[i]]
+        phis.append(word_topic_dist)
+    return phis
 
 
 def get_ranked_words(t, phis):
@@ -90,25 +102,13 @@ def get_top100_docs(thetas, num_topics):
     return top_topics_ranked_docs
 
 
-def main():
-    config = segan_config.SeganConfig()
-    #Note: Only works with LDA at the moment
-    modelresultspath = config.process['LDA']['modelresultspath']
-
-    #File handlers of raw data
-    fh_phi = open(os.path.join(config.process['output_path'], modelresultspath, 'phis.txt'))
-    fh_theta = open(os.path.join(config.process['output_path'], modelresultspath, 'thetas.txt'))
-    fh_vocab = open(os.path.join(config.base_path, config.preprocess['output_path'], '{0}.wvoc'.format(config.dataset_name)))
-    if os.path.isfile(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt')):
-        fh_docs_txt = open(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt'))
-    else:
-        print "ERROR: Can't find document text files..."
-
+def main(word_topics_fn, word_topics_weights_fn, doc_topics_fn, raw_text_input_fn, json_output_path):
     #Load raw data
-    phis = load_phis(fh_phi)
-    thetas = load_thetas(fh_theta)
-    vocab = load_vocab(fh_vocab)
-    txt_data = load_txt_data(fh_docs_txt)
+    vocab = load_vocab(open(word_topics_fn))
+    probs = load_word_topics_weights(open(word_topics_weights_fn))
+    phis = get_phis(probs, len(vocab))
+    thetas = load_thetas(open(doc_topics_fn))
+    txt_data = load_txt_data(open(raw_text_input_fn))
 
     #Filter data to just what we need
     num_topics = len(phis)
@@ -121,11 +121,9 @@ def main():
             'doc_txt': txt_data}
 
     #Write data to disk
-    print "Writing json to {0}".format(os.path.join(config.process['output_path'], modelresultspath, 'data.json'))
-    fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'vocab.json'), 'wb')
+    print "Writing json to {0}".format(os.path.join(json_output_path, 'vis.json'))
+    fhw = open(os.path.join(json_output_path, 'vocab.json'), 'wb')
     json.dump(vocab, fhw)
-    fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'data.json'), 'wb')
+    fhw = open(os.path.join(json_output_path, 'vis.json'), 'wb')
     json.dump(data, fhw)
 
-if __name__ == '__main__':
-    main()
