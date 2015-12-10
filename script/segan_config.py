@@ -13,8 +13,9 @@ import yaml
 
 class SeganConfig:
     def __init__(self, yaml_file='segan_config.yaml'):
-        if os.path.isfile(yaml_file):
-            yml_cnf = yaml.load(open(yaml_file))
+        scriptpath = os.path.dirname(os.path.realpath(__file__))
+        if os.path.isfile(os.path.join(scriptpath, yaml_file)):
+            yml_cnf = yaml.load(open(os.path.join(scriptpath, yaml_file)))
 
             self.base_path = yml_cnf['globals']['basepath']
             self.segan_bin_path = yml_cnf['globals']['seganbinpath']
