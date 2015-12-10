@@ -34,8 +34,12 @@ def load_word_topics_weights(fh):
 def load_txt_data(fh):
     txt_data = []
     for line in fh:
-        a = line.split('\t')
-        txt_data.append(a[1])
+        if line.strip():
+            a = line.split('\t')
+            if len(a) == 1:
+                txt_data.append(unicode(a[0].strip(), errors='ignore')) #TODO: this is a hack, it will drop data
+            else:
+                txt_data.append(unicode(a[1].strip(), errors='ignore'))
     return txt_data
 
 
@@ -108,7 +112,13 @@ def main(word_topics_fn, word_topics_weights_fn, doc_topics_fn, raw_text_input_f
     probs = load_word_topics_weights(open(word_topics_weights_fn))
     phis = get_phis(probs, len(vocab))
     thetas = load_thetas(open(doc_topics_fn))
-    txt_data = load_txt_data(open(raw_text_input_fn))
+    if os.path.isdir(raw_text_input_fn):
+        files = [x for x in os.listdir(raw_text_input_fn) if x.endswith('txt')]
+        txt_data = []
+        for single_text_input_fn in files:
+            txt_data.extend(load_txt_data(open(os.path.join(raw_text_input_fn, single_text_input_fn))))
+    else:
+        txt_data = load_txt_data(open(raw_text_input_fn))
 
     #Filter data to just what we need
     num_topics = len(phis)

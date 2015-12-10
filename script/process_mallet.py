@@ -11,18 +11,20 @@ import mallet_editor_transforms
 import shutil
 
 mallet_base_path = '/Users/chris/Downloads/mallet-2.0.8RC3/'
-datasetname = 'gao'
-mallet_data_path = '/Users/chris/School/UMCP/LING848-F15/final_project/malletdata'
-raw_text_input_fn = os.path.join(mallet_data_path, 'text.txt')
-
+datasetname = 'soc'
+mallet_data_path = '/Users/chris/School/UMCP/LING848-F15/pennebaker_text'
+raw_text_input_fn = os.path.join(mallet_data_path, 'all_data/sed_clean') # 'text.txt' at end if a file
 
 def run_lda(k_topics):
     tmpdir = tempfile.mkdtemp() #Where mallet files will get written to
+    print tmpdir
     mallet_filename = os.path.join(tmpdir, '{0}.mallet'.format(datasetname))
 
+    import_type = 'import-dir' if os.path.isdir(raw_text_input_fn) else 'import-file'
+
     #Preprocess text into mallet format
-    ppcmd = ['bin/mallet', 'import-file', '--input', raw_text_input_fn, '--output', mallet_filename,
-           '--remove-stopwords', '--preserve-case', '--keep-sequence']
+    ppcmd = ['bin/mallet', import_type, '--input', raw_text_input_fn, '--output', mallet_filename,
+           '--remove-stopwords', '--keep-sequence'] #'--preserve-case'
 
 
     #Actually run preprocessing

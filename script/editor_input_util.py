@@ -38,8 +38,8 @@ def load_thetas(fh):
 def load_txt_data(fh):
     txt_data = []
     for line in fh:
-        a = line.split('\t')
-        txt_data.append(a[1])
+        if line.strip():
+            txt_data.append(unicode(line.strip(), errors='ignore'))
     return txt_data
 
 
@@ -101,14 +101,20 @@ def main():
     fh_vocab = open(os.path.join(config.base_path, config.preprocess['output_path'], '{0}.wvoc'.format(config.dataset_name)))
     if os.path.isfile(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt')):
         fh_docs_txt = open(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt'))
+        txt_data = load_txt_data(fh_docs_txt)
     else:
-        print "ERROR: Can't find document text files..."
+        print "ERROR: Can't find document text files...{0}".format(os.path.join(config.base_path, config.preprocess['input_path']))
+        files = [x for x in os.listdir(os.path.join(config.base_path, config.preprocess['input_path'])) if x.endswith('txt')]
+        txt_data = []
+        for text_file_basename in files:
+            txt_data.extend(load_txt_data(open(os.path.join(config.base_path, config.preprocess['input_path'], text_file_basename))))
+
 
     #Load raw data
     phis = load_phis(fh_phi)
     thetas = load_thetas(fh_theta)
     vocab = load_vocab(fh_vocab)
-    txt_data = load_txt_data(fh_docs_txt)
+
 
     #Filter data to just what we need
     num_topics = len(phis)
@@ -121,10 +127,10 @@ def main():
             'doc_txt': txt_data}
 
     #Write data to disk
-    print "Writing json to {0}".format(os.path.join(config.process['output_path'], modelresultspath, 'data.json'))
+    print "Writing json to {0}".format(os.path.join(config.process['output_path'], modelresultspath, 'vis.json'))
     fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'vocab.json'), 'wb')
     json.dump(vocab, fhw)
-    fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'data.json'), 'wb')
+    fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'vis.json'), 'wb')
     json.dump(data, fhw)
 
 if __name__ == '__main__':
