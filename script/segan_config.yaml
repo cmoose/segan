@@ -26,7 +26,7 @@ preprocess:
   phrases: false
 
   #Required: path to text.txt or data folder, relative to basepath
-  inputfolderpath: data/raw_data
+  inputfolderpath: data/raw_data/text.txt
 
   #Optional: path to response.txt file (for SLDA, SNLDA)
   responsefilepath:
@@ -97,8 +97,8 @@ process:
 reprocess:
   LDA:
     custom:
-      #Path relative to LDA model results path
-      priortopicfile: new_phis.txt
+      #Path of new_phis.txt file, relative to basepath
+      priortopicfile: data/new_phis.txt
 
 
 #Options for topic editor
