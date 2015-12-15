@@ -93,14 +93,14 @@ def get_top100_docs(thetas, num_topics):
 def main():
     config = segan_config.SeganConfig()
     #Note: Only works with LDA at the moment
-    modelresultspath = config.process['LDA']['modelresultspath']
+    modelresultspath = config.process['LDA']['modelresultspath'] + '_reprocess'
 
     #File handlers of raw data
     fh_phi = open(os.path.join(config.process['output_path'], modelresultspath, 'phis.txt'))
     fh_theta = open(os.path.join(config.process['output_path'], modelresultspath, 'thetas.txt'))
     fh_vocab = open(os.path.join(config.base_path, config.preprocess['output_path'], '{0}.wvoc'.format(config.dataset_name)))
-    if os.path.isfile(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt')):
-        fh_docs_txt = open(os.path.join(config.base_path, config.preprocess['input_path'], 'text.txt'))
+    if os.path.isfile(os.path.join(config.base_path, config.preprocess['input_path'])):
+        fh_docs_txt = open(os.path.join(config.base_path, config.preprocess['input_path']))
         txt_data = load_txt_data(fh_docs_txt)
     else:
         print "ERROR: Can't find document text files...{0}".format(os.path.join(config.base_path, config.preprocess['input_path']))

@@ -86,13 +86,13 @@ class SeganConfig:
             #Only works with LDA at the moment
             self.reprocess = {}
             self.reprocess['LDA'] = {}
-            if not os.path.isfile(yml_cnf['reprocess']['LDA']['custom']['priortopicfile']):
+            if not os.path.isfile(os.path.join(self.base_path, yml_cnf['reprocess']['LDA']['custom']['priortopicfile'])):
                 self.reprocess['LDA']['prior-topic-file'] = \
                     os.path.join(self.process['output_path'],
                                  self.process['LDA']['modelresultspath'],
                                  yml_cnf['reprocess']['LDA']['custom']['priortopicfile'])
             else:
-                self.reprocess['LDA']['prior-topic-file'] = yml_cnf['reprocess']['LDA']['custom']['priortopicfile']
+                self.reprocess['LDA']['prior-topic-file'] = os.path.join(self.base_path, yml_cnf['reprocess']['LDA']['custom']['priortopicfile'])
 
     def argmap(self, arg):
         d = {'burnIn': 'B', 'maxIter': 'M', 'sampleLag': 'L', 'alpha': 'a', 'beta': 'b'}

@@ -22,10 +22,20 @@ def load_vocab(fh):
 def load_export_from_editor(fh):
     raw_j = json.load(fh)
     manual_topics = {}
+    unique_labels = {}
     for i in range(0, len(raw_j)):
         m_topic = {'keep': set(), 'stop': set(), 'label': ""}
+        label = raw_j[str(i)]['topiclabel'].strip()
+
+        # Conflate topics if we find an identical label
+        if label:
+            if unique_labels.has_key(label):
+                m_topic = manual_topics[unique_labels[label]]
+            else:
+                #Keep track of existing labels
+                unique_labels[label] = i
+
         m_topic['label'] = raw_j[str(i)]['topiclabel']
-        #TODO: need to check labels to conflate topics
 
         for word_obj in raw_j[str(i)]['words']:
             if word_obj['importance'] == 1:
@@ -54,7 +64,7 @@ def create_new_phis_file(fhw, new_topic_counts, vocab):
         fhw.write(line_prefix + "\t".join(line) + '\n')
 
 
-def build_new_manual_topics(new_K, manual_topics, vocab):
+def build_new_manual_topics(new_K, manual_topics, vocab, good_prob_mass_percent=0.75):
     new_topics = []
     all_topic_counts = {} #What we will return
 
@@ -83,14 +93,14 @@ def build_new_manual_topics(new_K, manual_topics, vocab):
         #Skip if the topic has no marked "good" tokens
         if len(good_tokens) > 0:
             l_good = len(good_tokens)
-            base_p_good = 0.75/float(l_good)
+            base_p_good = good_prob_mass_percent/float(l_good)
 
             for token in good_tokens:
                 p = base_p_good + base_p_good*jitter() #new probability of token (adding a jitter of -5% to 5% of base probability value)
                 topic_token_counts[token] = p
 
             l_bad = len(bad_tokens)
-            base_p_bad = 0.25/float(l_bad)
+            base_p_bad = (1-good_prob_mass_percent)/float(l_bad)
 
             #Bad tokens are the rest of the vocab not in good token or stopword lists
             #These tokens' probabilities all sum to 0.25
@@ -125,7 +135,7 @@ def build_new_manual_topics(new_K, manual_topics, vocab):
     return all_topic_counts
 
 
-def main(export_filename):
+def main(export_filename, added_K, good_prob_mass_percent):
     config = segan_config.SeganConfig()
 
     fh_vocab = open(os.path.join(config.base_path, config.preprocess['output_path'], '{0}.wvoc'.format(config.dataset_name)))
@@ -137,8 +147,7 @@ def main(export_filename):
 
     vocab = load_vocab(fh_vocab)
     new_topics_data = load_export_from_editor(fh_export)
-    added_K = 4 #Number of padded topics to add
-    new_topics_counts = build_new_manual_topics(len(new_topics_data) + added_K, new_topics_data, vocab)
+    new_topics_counts = build_new_manual_topics(len(new_topics_data) + added_K, new_topics_data, vocab, good_prob_mass_percent)
     print "Creating new phis file for segan at {0}".format(os.path.join(config.reprocess['LDA']['prior-topic-file']))
     create_new_phis_file(fhw_new_phis, new_topics_counts, vocab)
 
@@ -146,4 +155,11 @@ def main(export_filename):
 if __name__ == '__main__':
     #Where you saved the output of the editor
     editor_output_filename = '/Users/chris/Downloads/exports.json'
-    main(editor_output_filename)
+
+    #Number of padded topics to add
+    added_K = 10
+
+    #Percent of the probability mass "good/confirmed" words will take up, remainder is rest of vocab
+    good_prob_mass_percent = 0.75
+
+    main(editor_output_filename, added_K, good_prob_mass_percent)
