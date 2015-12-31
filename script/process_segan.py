@@ -7,8 +7,7 @@ import segan_config
 import subprocess
 
 
-def run_all(models, k_topics):
-    config = segan_config.SeganConfig()
+def run_all(models, k_topics, config):
 
     for model in models:
         cmd_args = config.get_process_args(model)
@@ -40,13 +39,14 @@ def run_all(models, k_topics):
 
 
 def run_single_lda(k_topic):
-    run_all(['LDA'], [k_topic])
+    config = segan_config.SeganConfig()
+    run_all(['LDA'], [k_topic], config)
 
 
 if __name__ == '__main__':
     #models = ['LDA', 'SLDA', 'SNLDA']
     models = ['LDA']
-    k_topics = [35] #All possible topic numbers
-    run_all(models, k_topics)
-    #run_single_lda(35)
+    config = segan_config.SeganConfig()
+    k = config.process['options']['K']
+    run_all(models, [k], config)
 
