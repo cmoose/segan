@@ -2,6 +2,10 @@
 ## Prerequisites
 - maven
 - python yaml module (to drive segan from python)
+- For distill-ery (topic editor)
+  - numpy
+  - pandas
+  - scipy
 
 ## Build
 To build the latest code:
