@@ -135,14 +135,17 @@ def build_new_manual_topics(new_K, manual_topics, vocab, good_prob_mass_percent=
     return all_topic_counts
 
 
-def main(export_filename, added_K, good_prob_mass_percent):
+def main(added_K, good_prob_mass_percent):
     config = segan_config.SeganConfig()
+
+    #Where you saved the output of the editor
+    export_filename = config.editor['exportsfile']
 
     fh_vocab = open(os.path.join(config.base_path, config.preprocess['output_path'], '{0}.wvoc'.format(config.dataset_name)))
     fh_export = open(export_filename)
     #TODO: We might want to change the path here since this new file will represent a
     #TODO: different (modified) model in reality
-    #Note: Only works with LDA at the moment
+    #TODO: Only works with LDA at the moment
     fhw_new_phis = open(config.reprocess['LDA']['prior-topic-file'], 'wb')
 
     vocab = load_vocab(fh_vocab)
@@ -153,8 +156,6 @@ def main(export_filename, added_K, good_prob_mass_percent):
 
 
 if __name__ == '__main__':
-    #Where you saved the output of the editor
-    editor_output_filename = '/Users/chris/Downloads/exports.json'
 
     #Number of padded topics to add
     added_K = 10
@@ -162,4 +163,4 @@ if __name__ == '__main__':
     #Percent of the probability mass "good/confirmed" words will take up, remainder is rest of vocab
     good_prob_mass_percent = 0.75
 
-    main(editor_output_filename, added_K, good_prob_mass_percent)
+    main(added_K, good_prob_mass_percent)

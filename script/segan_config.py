@@ -94,6 +94,9 @@ class SeganConfig:
             else:
                 self.reprocess['LDA']['prior-topic-file'] = os.path.join(self.base_path, yml_cnf['reprocess']['LDA']['custom']['priortopicfile'])
 
+            self.editor = {}
+            self.editor['exportsfile'] = os.path.join(self.base_path, yml_cnf['editor']['exportsfile'])
+
     def argmap(self, arg):
         d = {'burnIn': 'B', 'maxIter': 'M', 'sampleLag': 'L', 'alpha': 'a', 'beta': 'b'}
         return d[arg]

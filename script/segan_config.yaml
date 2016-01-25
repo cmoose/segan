@@ -103,3 +103,5 @@ reprocess:
 
 #Options for topic editor
 editor:
+  #Optional: UI exports.json file, relative to basepath
+  exportsfile: exports.json
