@@ -272,6 +272,75 @@ def _topic_coordinates(mds, topic_term_dists, topic_proportion):
    return mds_df
 
 
+# Determines how many words are needed to reach specific probability masses (10-30%)
+def explore_prob_mass(top_phis):
+    prob_mass_max10 = float(0.1) #10%
+    prob_mass_max20 = float(0.2) #20%
+    prob_mass_max30 = float(0.3) #30%
+    for topic_id, topic in top_phis.items():
+        word_count = 0
+        counts = {'10': 0, '20': 0, '30': 0}
+        cum_prob_mass = float(0)
+        for word_obj in topic:
+            cum_prob_mass += word_obj['prob']
+            word_count += 1
+            if cum_prob_mass > prob_mass_max10 and counts['10'] is 0:
+                counts['10'] = word_count
+            if cum_prob_mass > prob_mass_max20 and counts['20'] is 0:
+                counts['20'] = word_count
+            if cum_prob_mass > prob_mass_max30 and counts['30'] is 0:
+                counts['30'] = word_count
+                break
+        for k,count in counts.items():
+            if count is 0:
+                #Replace 0s with 100, so that we sort correctly
+                counts[k] = 100
+
+        print "topic {0}: {1}".format(topic_id, sorted(counts.values()))
+    exit(0)
+
+
+def calc_prob_mass(top_phis):
+    prob_masses = {'10': [], '20': [], '30': [], '40': [], '50': []}
+    for topic_id, topic in top_phis.items():
+        word_count = 0
+        cum_prob_mass = float(0)
+        for word_obj in topic:
+            cum_prob_mass += word_obj['prob']
+            word_count += 1
+            if word_count is 10:
+                prob_masses['10'].append(cum_prob_mass)
+            elif word_count is 20:
+                prob_masses['20'].append(cum_prob_mass)
+            elif word_count is 30:
+                prob_masses['30'].append(cum_prob_mass)
+            elif word_count is 40:
+                prob_masses['40'].append(cum_prob_mass)
+            elif word_count is 50:
+                prob_masses['50'].append(cum_prob_mass)
+                break
+    return prob_masses
+
+
+# for each visible word, return its probabilities according to each topic
+# Used to map relative probability to a color in d3
+def calc_norm_word_topic_probs(visible_words, phis):
+    p_matrix = np.array(phis)
+    word_topic_probs = {}
+    for word_id in visible_words:
+        word_topic_probs[word_id] = p_matrix[:,word_id].tolist()
+        #word_topic_probs_normed[word_id] = p_matrix[:,word_id] / p_matrix[:,word_id].sum(axis=0)
+    return word_topic_probs
+
+
+# Helper function to get a set of all visible words (in top 100 of each topic)
+# @return word/vocab ids
+def get_visible_words(top_phis):
+    visible_words = set()
+    for topic in top_phis.values():
+        for word_obj in topic:
+            visible_words.add(word_obj['word_id'])
+    return visible_words
 
 
 def main():
@@ -318,6 +387,9 @@ def main():
         top_topic_words, top_topic_words_ordered = format_top100_words(top_phis, vocab)
         labels = match_labels(exports, top_topic_words, top_topic_words_ordered)
 
+    visible_words = get_visible_words(top_phis)
+    word_topic_probs = calc_norm_word_topic_probs(visible_words, phis)
+    prob_masses = calc_prob_mass(top_phis)
 
     # Load data needed for intertopic distance map
     # Taken from pyldavis python scripts
@@ -336,14 +408,12 @@ def main():
         'predicted_labels': labels,
         #needed for intertopic distance map
         'mdsDat': topic_coordinates.to_dict(orient='list'),
-        'plot.opts': plot_opts}
+        'plot.opts': plot_opts,
+        'prob_mass': prob_masses,
+        'top_terms_probs': word_topic_probs}
 
     #Write data to disk
     print "Writing json to {0}".format(os.path.join(config.process['output_path'], modelresultspath))
-    print "\t...vocab.json"
-    fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'vocab.json'), 'wb')
-    json.dump(vocab, fhw)
-    fhw.close()
     print "\t...vis.json"
     fhw = open(os.path.join(config.process['output_path'], modelresultspath, 'vis.json'), 'wb')
     json.dump(data, fhw)
