@@ -18,7 +18,7 @@ To build the latest code:
   - This will build a `segan-1.0-SNAPSHOT.jar` in folder `target`
 
 ## segan config file
-To make life easier, we've created a yaml configuration file containing all options available to preprocessing, processing, and reprocessing in segan. The file is located in `script/segan_config.yaml`. Currently, it is only used by the python driver, not segan itself.
+To make life easier, we've created a yaml configuration file containing all options available to preprocessing, processing, and reprocessing in segan. The file is located in `script/segan_config.yaml.template`. Prior to running any scripts, rename this file to segan_config.yaml. Currently, it is only used by the python driver, not segan itself.
 
 ## Preprocessing
 Segan supports preprocessing your text, which builds a vocabulary file, plus counts of tokens needed for running the models. Segan requires your text to be in one of two possible formats:  
@@ -29,6 +29,7 @@ Segan supports preprocessing your text, which builds a vocabulary file, plus cou
   - where each file is a document named `<docid>.txt` and the contents contain the doc text.
 
 ### Running Preprocessing
+1. Rename segan_config.yaml.template to segan_config.yaml
 1. Configure segan_config.yaml to use the desired directories/files
 2. run `python script/preprocess_segan.py`
 
