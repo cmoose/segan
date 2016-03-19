@@ -7,6 +7,7 @@
 import os.path
 import json
 import heapq
+import numpy as np
 
 
 #Doc-topic distributions
@@ -16,6 +17,21 @@ def load_thetas(fh):
         doc = [float(x) for x in line.split()[2:]]
         thetas.append(doc)
     return thetas
+
+
+def load_word_topics_counts(fh, num_topics, len_vocab):
+    phis = np.zeros((num_topics, len_vocab))
+    token_lookup = {}
+    for line in fh:
+        items = line.split()
+        token_id = int(items[0])
+        token = items[1]
+        token_lookup[token_id] = token
+        for topiccount in items[2:]:
+            topic_id = int(topiccount.split(":")[0])
+            count = int(topiccount.split(":")[1])
+            phis[topic_id,token_id] = count
+    return phis.tolist(), token_lookup
 
 
 def load_word_topics_weights(fh):
@@ -53,6 +69,7 @@ def load_vocab(fh):
 
 def get_phis(word_topics_weights, vocab_size):
     phis = []
+    #TODO: This is incorrect
     for i in range(0,len(word_topics_weights)):
         word_topic_dist = [float(x/vocab_size) for x in word_topics_weights[i]]
         phis.append(word_topic_dist)
@@ -106,11 +123,23 @@ def get_top100_docs(thetas, num_topics):
     return top_topics_ranked_docs
 
 
-def main(word_topics_fn, word_topics_weights_fn, doc_topics_fn, raw_text_input_fn, json_output_path):
+def get_num_topics(fh):
+    num_topics = 0
+    for line in fh:
+        topic_id = int(line.split()[0])
+        if topic_id > num_topics:
+            num_topics = topic_id
+    return num_topics+1
+
+
+def main(word_topics_fn, topics_fn, word_topics_weights_fn, doc_topics_fn, raw_text_input_fn, json_output_path):
     #Load raw data
     vocab = load_vocab(open(word_topics_fn))
-    probs = load_word_topics_weights(open(word_topics_weights_fn))
-    phis = get_phis(probs, len(vocab))
+    #probs = load_word_topics_weights(open(word_topics_weights_fn))
+    num_topics = get_num_topics(open(topics_fn))
+    #phis = get_phis(probs, len(vocab))
+    #TODO: phis not normalized
+    phis, token_lookup = load_word_topics_counts(open(word_topics_fn), num_topics, len(vocab))
     thetas = load_thetas(open(doc_topics_fn))
     if os.path.isdir(raw_text_input_fn):
         files = [x for x in os.listdir(raw_text_input_fn) if x.endswith('txt')]
@@ -121,7 +150,7 @@ def main(word_topics_fn, word_topics_weights_fn, doc_topics_fn, raw_text_input_f
         txt_data = load_txt_data(open(raw_text_input_fn))
 
     #Filter data to just what we need
-    num_topics = len(phis)
+    #num_topics = len(phis)
     top_phis = get_top100_words(phis, num_topics)
     top_thetas = get_top100_docs(thetas, num_topics)
 

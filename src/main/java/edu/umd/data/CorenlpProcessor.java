@@ -54,8 +54,9 @@ public class CorenlpProcessor {
     public boolean lemmatization = false; // whether lemmatization should be performed
     public boolean createPOSphrases = false; // whether to create phrases based on POS regex
     public String stopwordFile;
+
     // tools
-    private CorenlpStopwordRemoval stopwordRemoval;
+    private StopwordRemoval stopwordRemoval;
     public HashMap<String, Integer> termFreq;
     public HashMap<String, Integer> docFreq;
     protected HashMap<String, Integer> leftFreq;
@@ -67,7 +68,7 @@ public class CorenlpProcessor {
 
     private final Pattern p = Pattern.compile("\\p{Punct}");
 
-    public CorenlpProcessor(CorenlpProcessor corp) {
+    /*public CorenlpProcessor(CorenlpProcessor corp) {
         this(corp.unigramCountCutoff,
                 corp.bigramCountCutoff,
                 corp.bigramScoreCutoff,
@@ -79,9 +80,9 @@ public class CorenlpProcessor {
                 corp.docTypeCountCutoff,
                 corp.filterStopwords,
                 corp.lemmatization,
-                corp.createPOSphrases,
-                corp.stopwordFile);
-    }
+                corp.createPOSphrases);
+                corp.stopwordList);
+    }*/
 
     public CorenlpProcessor(
             int unigramCountCutoff,
@@ -111,6 +112,92 @@ public class CorenlpProcessor {
                 lemmatization,
                 createPOSphrases,
                 stopwordFile);
+    }
+
+    public CorenlpProcessor(
+            int unigramCountCutoff,
+            int bigramCountCutoff,
+            double bigramScoreCutoff,
+            int maxVocabSize,
+            int vocTermFreqMinCutoff,
+            int vocTermFreqMaxCutoff,
+            int vocDocFreqMinCutoff,
+            int vocDocFreqMaxCutoff,
+            int docTypeCountCutoff,
+            boolean filterStopwords,
+            boolean lemmatization,
+            boolean createPOSphrases,
+            ArrayList<String> stopwordList) {
+        this(unigramCountCutoff,
+                bigramCountCutoff,
+                bigramScoreCutoff,
+                maxVocabSize,
+                vocTermFreqMinCutoff,
+                vocTermFreqMaxCutoff,
+                vocDocFreqMinCutoff,
+                vocDocFreqMaxCutoff,
+                docTypeCountCutoff,
+                3,
+                filterStopwords,
+                lemmatization,
+                createPOSphrases,
+                stopwordList);
+    }
+
+    public CorenlpProcessor(
+            int unigramCountCutoff,
+            int bigramCountCutoff,
+            double bigramScoreCutoff,
+            int maxVocabSize,
+            int vocTermFreqMinCutoff,
+            int vocTermFreqMaxCutoff,
+            int vocDocFreqMinCutoff,
+            int vocDocFreqMaxCutoff,
+            int docTypeCountCutoff,
+            int minWordLength,
+            boolean filterStopwords,
+            boolean lemmatization,
+            boolean createPOSphrases,
+            ArrayList<String> stopwordList) {
+        this.excludeFromBigrams = new HashSet<String>();
+
+        // settings
+        this.unigramCountCutoff = unigramCountCutoff;
+        this.bigramCountCutoff = bigramCountCutoff;
+        this.bigramScoreCutoff = bigramScoreCutoff;
+        this.maxVocabSize = maxVocabSize;
+
+        this.vocabTermFreqMinCutoff = vocTermFreqMinCutoff;
+        this.vocabTermFreqMaxCutoff = vocTermFreqMaxCutoff;
+
+        this.vocabDocFreqMinCutoff = vocDocFreqMinCutoff;
+        this.vocabDocFreqMaxCutoff = vocDocFreqMaxCutoff;
+
+        this.docTypeCountCutoff = docTypeCountCutoff;
+        this.minWordLength = minWordLength;
+
+        this.filterStopwords = filterStopwords;
+        this.lemmatization = lemmatization;
+        this.createPOSphrases = createPOSphrases;
+
+        this.termFreq = new HashMap<String, Integer>();
+        this.docFreq = new HashMap<String, Integer>();
+
+        this.leftFreq = new HashMap<String, Integer>();
+        this.rightFreq = new HashMap<String, Integer>();
+        this.bigramFreq = new HashMap<String, Integer>();
+        this.totalBigram = 0;
+
+        if (stopwordFile == null) {
+            this.stopwordRemoval = new StopwordRemoval();
+        } else {
+            this.stopwordFile = stopwordFile;
+            this.stopwordRemoval = new StopwordRemoval(stopwordFile);
+        }
+        if (stopwordList != null) {
+            this.stopwordRemoval.setStopwords(stopwordList);
+        }
+
     }
 
     public CorenlpProcessor(
@@ -158,13 +245,12 @@ public class CorenlpProcessor {
         this.totalBigram = 0;
 
         if (stopwordFile == null) {
-            this.stopwordRemoval = new CorenlpStopwordRemoval();
+            this.stopwordRemoval = new StopwordRemoval();
         } else {
             this.stopwordFile = stopwordFile;
-            this.stopwordRemoval = new CorenlpStopwordRemoval(stopwordFile);
+            this.stopwordRemoval = new StopwordRemoval(stopwordFile);
         }
-
-
+        
 
     }
 
@@ -202,7 +288,7 @@ public class CorenlpProcessor {
 
     public void loadVocab(String filepath) {
         try {
-            this.vocabulary = new ArrayList<>();
+            this.vocabulary = new ArrayList<String>();
             BufferedReader reader = IOUtils.getBufferedReader(filepath);
             String line;
             while ((line = reader.readLine()) != null)
@@ -244,7 +330,7 @@ public class CorenlpProcessor {
         //        "!!", "!!!", "!!!!", "$", "%", "&", "+", "/", ";", "?", "??", "???", "????", "#", "..."};
         String[] punct = {"CD", ".", ",", ":", "POS", "''", "``", "CC", "#", "$", "CD"}; //POS tags to filter out
 
-        HashSet<String> pos_punct = new HashSet<>(Arrays.asList(punct));
+        HashSet<String> pos_punct = new HashSet<String>(Arrays.asList(punct));
 
         D = rawTexts.length; //# of Documents in dataset/corpus
         Set<String> uniqueVocab = new HashSet<String>();

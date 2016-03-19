@@ -118,6 +118,17 @@ public class CorenlpTextDataset extends TextDataset {
         infoWriter.close();
     }
 
+    public void outputAll(String outputFolder) {
+        try {
+            outputWordVocab(outputFolder);
+            outputTextData(outputFolder);
+            outputDocumentInfo(outputFolder);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public void inputDocumentInfo(File filepath) throws Exception { //Currently not used I think
         if (verbose) {
@@ -396,7 +407,7 @@ public class CorenlpTextDataset extends TextDataset {
     public void setWordVocab(ArrayList<String> uniqueVocab) {
 
         this.wordVocab = uniqueVocab;
-        this.wordVocabLookup = new HashMap<>();
+        this.wordVocabLookup = new HashMap();
 
         //Create word vocab lookup hash map
         for (int i=0; i < uniqueVocab.size(); i++) {
@@ -415,11 +426,11 @@ public class CorenlpTextDataset extends TextDataset {
         this.docsTokens = docsTokens;
         int D = docsTokens.size();
 
-        ArrayList<ArrayList<String>> docsTokenIDs = new ArrayList<>();
+        ArrayList<ArrayList<String>> docsTokenIDs = new ArrayList();
         //Iterate through each document, store tokenID:count for each token via wordVocab lookup
         for (int d=0; d < D; d++) {
 
-            ArrayList<String> docTokensID = new ArrayList<>();
+            ArrayList<String> docTokensID = new ArrayList();
             Set<String> docTokenKeys = docsTokens.get(d).keySet();
             for (String token : docTokenKeys) {
                 Integer count = docsTokens.get(d).get(token);
