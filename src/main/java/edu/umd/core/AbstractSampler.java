@@ -197,6 +197,8 @@ public abstract class AbstractSampler implements Serializable {
         return this.LAG;
     }
 
+    public int getIter() { return this.iter; }
+
     public int getReportInterval() {
         return this.REP_INTERVAL;
     }
