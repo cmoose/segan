@@ -2,6 +2,7 @@ package edu.umd.sampler.unsupervised;
 
 import edu.umd.core.AbstractSampler;
 import edu.umd.data.TextDataset;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
 import edu.umd.sampling.likelihood.DirMult;
@@ -24,6 +26,8 @@ import edu.umd.util.SamplerUtils;
  * @author vietan
  */
 public class LDA extends AbstractSampler {
+
+    public volatile boolean continueRunning = true; //To allow for premature exit of thread
 
     // hyperparameters
     public static final int ALPHA = 0;
@@ -156,9 +160,9 @@ public class LDA extends AbstractSampler {
     /**
      * Set training data.
      *
-     * @param docWords All documents
+     * @param docWords   All documents
      * @param docIndices Indices of selected documents. If this is null, all
-     * documents are considered.
+     *                   documents are considered.
      */
     public void train(int[][] docWords, ArrayList<Integer> docIndices) {
         this.docIndices = docIndices;
@@ -209,7 +213,7 @@ public class LDA extends AbstractSampler {
     /**
      * Initialized with seeded distributions.
      *
-     * @param docTopicPrior Topic distribution for each document
+     * @param docTopicPrior  Topic distribution for each document
      * @param topicWordPrior Word distribution for each topic
      */
     public void initialize(double[][] docTopicPrior, double[][] topicWordPrior) {
@@ -309,61 +313,66 @@ public class LDA extends AbstractSampler {
         startTime = System.currentTimeMillis();
 
         for (iter = 0; iter < MAX_ITER; iter++) {
-            isReporting = isReporting();
-            numTokensChanged = 0;
-            if (isReporting) {
-                // store llh after every iteration
-                double loglikelihood = this.getLogLikelihood();
-                logLikelihoods.add(loglikelihood);
-                String str = "Iter " + iter + "/" + MAX_ITER
-                        + "\t llh = " + loglikelihood
-                        + "\n" + getCurrentState();
-                if (iter < BURN_IN) {
-                    logln("--- Burning in. " + str);
-                } else {
-                    logln("--- Sampling. " + str);
-                }
-            }
+            if (continueRunning) { //Allows for premature exit of thread
 
-            // sample topic assignments
-            long topicTime = sampleZs(REMOVE, ADD, REMOVE, ADD);
-
-            // parameter optimization by slice sampling
-            if (paramOptimized && iter % LAG == 0 && iter >= BURN_IN) {
-                sliceSample();
-                ArrayList<Double> sparams = new ArrayList<Double>();
-                for (double param : this.hyperparams) {
-                    sparams.add(param);
-                }
-                this.sampledParams.add(sparams);
-
-                if (verbose) {
-                    for (double p : sparams) {
-                        System.out.println(p);
+                isReporting = isReporting();
+                numTokensChanged = 0;
+                if (isReporting) {
+                    // store llh after every iteration
+                    double loglikelihood = this.getLogLikelihood();
+                    logLikelihoods.add(loglikelihood);
+                    String str = "Iter " + iter + "/" + MAX_ITER
+                            + "\t llh = " + loglikelihood
+                            + "\n" + getCurrentState();
+                    if (iter < BURN_IN) {
+                        logln("--- Burning in. " + str);
+                    } else {
+                        logln("--- Sampling. " + str);
                     }
                 }
+
+                // sample topic assignments
+                long topicTime = sampleZs(REMOVE, ADD, REMOVE, ADD);
+
+                // parameter optimization by slice sampling
+                if (paramOptimized && iter % LAG == 0 && iter >= BURN_IN) {
+                    sliceSample();
+                    ArrayList<Double> sparams = new ArrayList<Double>();
+                    for (double param : this.hyperparams) {
+                        sparams.add(param);
+                    }
+                    this.sampledParams.add(sparams);
+
+                    if (verbose) {
+                        for (double p : sparams) {
+                            System.out.println(p);
+                        }
+                    }
+                }
+
+                if (isReporting) {
+                    logln("--- --- Time. topic: " + topicTime);
+                    logln("--- --- # tokens: " + numTokens
+                            + ". # token changed: " + numTokensChanged
+                            + ". change ratio: "
+                            + MiscUtils.formatDouble((double) numTokensChanged / numTokens)
+                            + "\n\n");
+                }
+
+                if (debug) {
+                    validate("iter " + iter);
+                }
+
+                // store model
+                if (report && iter > BURN_IN && iter % LAG == 0) {
+                    outputState(new File(reportFolderPath, "iter-" + iter + ".zip"));
+                    outputTopicTopWords(new File(reportFolderPath,
+                            "topwords-" + iter + ".txt"), 20);
+                }
             }
 
-            if (isReporting) {
-                logln("--- --- Time. topic: " + topicTime);
-                logln("--- --- # tokens: " + numTokens
-                        + ". # token changed: " + numTokensChanged
-                        + ". change ratio: "
-                        + MiscUtils.formatDouble((double) numTokensChanged / numTokens)
-                        + "\n\n");
-            }
-
-            if (debug) {
-                validate("iter " + iter);
-            }
-
-            // store model
-            if (report && iter > BURN_IN && iter % LAG == 0) {
-                outputState(new File(reportFolderPath, "iter-" + iter + ".zip"));
-                outputTopicTopWords(new File(reportFolderPath,
-                        "topwords-" + iter + ".txt"), 20);
-            }
         }
+
 
         if (report) { // output the final model
             outputState(new File(reportFolderPath, "iter-" + iter + ".zip"));
@@ -389,7 +398,7 @@ public class LDA extends AbstractSampler {
      * @return Elapsed time
      */
     protected long sampleZs(boolean removeFromModel, boolean addToModel,
-            boolean removeFromData, boolean addToData) {
+                            boolean removeFromData, boolean addToData) {
         long sTime = System.currentTimeMillis();
         for (int dd = 0; dd < D; dd++) {
             for (int nn = 0; nn < z[dd].length; nn++) {
@@ -403,16 +412,16 @@ public class LDA extends AbstractSampler {
     /**
      * Sample the topic assignment for each token
      *
-     * @param dd The document index
-     * @param nn The token index
+     * @param dd              The document index
+     * @param nn              The token index
      * @param removeFromModel
      * @param addToModel
      * @param removeFromData
      * @param addToData
      */
     protected void sampleZ(int dd, int nn,
-            boolean removeFromModel, boolean addToModel,
-            boolean removeFromData, boolean addToData) {
+                           boolean removeFromModel, boolean addToModel,
+                           boolean removeFromData, boolean addToData) {
         if (removeFromData) {
             docTopics[dd].decrement(z[dd][nn]);
         }
