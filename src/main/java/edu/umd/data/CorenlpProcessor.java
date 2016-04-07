@@ -54,8 +54,11 @@ public class CorenlpProcessor {
     public boolean lemmatization = false; // whether lemmatization should be performed
     public boolean createPOSphrases = false; // whether to create phrases based on POS regex
     public String stopwordFile;
+    public PhraseTree customPhrases;
+    public String ending = "$$";
 
     // tools
+    private StanfordCoreNLP pipeline;
     private StopwordRemoval stopwordRemoval;
     public HashMap<String, Integer> termFreq;
     public HashMap<String, Integer> docFreq;
@@ -84,6 +87,7 @@ public class CorenlpProcessor {
                 corp.stopwordList);
     }*/
 
+    //Has no custom minimum word length, otherwise identical
     public CorenlpProcessor(
             int unigramCountCutoff,
             int bigramCountCutoff,
@@ -98,6 +102,8 @@ public class CorenlpProcessor {
             boolean lemmatization,
             boolean createPOSphrases,
             String stopwordFile) {
+
+
         this(unigramCountCutoff,
                 bigramCountCutoff,
                 bigramScoreCutoff,
@@ -114,7 +120,9 @@ public class CorenlpProcessor {
                 stopwordFile);
     }
 
-    public CorenlpProcessor(
+
+    //Has a stopword list of words, otherwise identical
+    /*public CorenlpProcessor(
             int unigramCountCutoff,
             int bigramCountCutoff,
             double bigramScoreCutoff,
@@ -127,6 +135,7 @@ public class CorenlpProcessor {
             boolean filterStopwords,
             boolean lemmatization,
             boolean createPOSphrases,
+            PhraseTree customPhrases,
             ArrayList<String> stopwordList) {
         this(unigramCountCutoff,
                 bigramCountCutoff,
@@ -141,24 +150,27 @@ public class CorenlpProcessor {
                 filterStopwords,
                 lemmatization,
                 createPOSphrases,
+                customPhrases,
                 stopwordList);
-    }
+    }*/
 
     public CorenlpProcessor(
-            int unigramCountCutoff,
-            int bigramCountCutoff,
-            double bigramScoreCutoff,
-            int maxVocabSize,
-            int vocTermFreqMinCutoff,
-            int vocTermFreqMaxCutoff,
-            int vocDocFreqMinCutoff,
-            int vocDocFreqMaxCutoff,
-            int docTypeCountCutoff,
-            int minWordLength,
             boolean filterStopwords,
             boolean lemmatization,
             boolean createPOSphrases,
             ArrayList<String> stopwordList) {
+
+        int unigramCountCutoff = 1;
+        int bigramCountCutoff = 1;
+        double bigramScoreCutoff = 5.0;
+        int maxVocabSize = Integer.MAX_VALUE;
+        int vocTermFreqMinCutoff = 1;
+        int vocTermFreqMaxCutoff = Integer.MAX_VALUE;
+        int vocDocFreqMinCutoff = 1;
+        int vocDocFreqMaxCutoff = Integer.MAX_VALUE;
+        int docTypeCountCutoff = 1;
+        int minWordLength = 3;
+
         this.excludeFromBigrams = new HashSet<String>();
 
         // settings
@@ -188,15 +200,18 @@ public class CorenlpProcessor {
         this.bigramFreq = new HashMap<String, Integer>();
         this.totalBigram = 0;
 
-        if (stopwordFile == null) {
-            this.stopwordRemoval = new StopwordRemoval();
-        } else {
-            this.stopwordFile = stopwordFile;
-            this.stopwordRemoval = new StopwordRemoval(stopwordFile);
-        }
+        this.stopwordRemoval = new StopwordRemoval();
+
         if (stopwordList != null) {
             this.stopwordRemoval.setStopwords(stopwordList);
         }
+
+        // Create a CoreNLP pipeline
+        Properties props = new Properties();
+        props.put("annotators", "tokenize, ssplit, pos, lemma"); //ner to add
+        // props.put("ner.model", "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz");
+        // props.put("ner.applyNumericClassifiers", "false");
+        this.pipeline = new StanfordCoreNLP(props);
 
     }
 
@@ -244,13 +259,15 @@ public class CorenlpProcessor {
         this.bigramFreq = new HashMap<String, Integer>();
         this.totalBigram = 0;
 
-        if (stopwordFile == null) {
-            this.stopwordRemoval = new StopwordRemoval();
-        } else {
-            this.stopwordFile = stopwordFile;
-            this.stopwordRemoval = new StopwordRemoval(stopwordFile);
-        }
-        
+        this.stopwordRemoval = new StopwordRemoval(stopwordFile);
+
+
+        // Create a CoreNLP pipeline
+        Properties props = new Properties();
+        props.put("annotators", "tokenize, ssplit, pos, lemma"); //ner to add
+        // props.put("ner.model", "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz");
+        // props.put("ner.applyNumericClassifiers", "false");
+        this.pipeline = new StanfordCoreNLP(props);
 
     }
 
@@ -300,6 +317,52 @@ public class CorenlpProcessor {
         }
     }
 
+    /*
+     * Lemmatizes the custom phrase list and creates a FSM for querying
+     */
+    public void addCustomPhrases(ArrayList<String> input) {
+
+        //We have custom phrases, initialize our phrasetree now (otherwise we want to keep it null)
+        customPhrases = new PhraseTree();
+
+        for (String rawPhrase : input) {
+            rawPhrase = rawPhrase.replace("_", " "); //replace any underscores if user used as delimiter
+
+            //Prepare the phrase to be annotated
+            Annotation annotation = new Annotation(rawPhrase);
+            // run all the selected Annotators on the phrase/document
+            pipeline.annotate(annotation);
+
+            List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+
+            if (sentences != null && ! sentences.isEmpty()) {
+                ArrayList<String> phraseLemmaList = new ArrayList<>();
+
+                for (CoreMap sentence : sentences) {
+
+                    for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+                        String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
+                        phraseLemmaList.add(lemma);
+                    }
+
+                }
+
+                //Add custom ending
+                phraseLemmaList.add(ending);
+
+                //Add new phrase
+                String newPhrase = String.join("_", phraseLemmaList);
+                customPhrases.addPhrase(newPhrase);
+
+            } else {
+                System.out.println("Ignoring input phrase: " + rawPhrase);
+            }
+
+
+        }
+
+    }
+
 
 
     /**
@@ -319,12 +382,6 @@ public class CorenlpProcessor {
             System.out.println("Tokenizing and counting ...");
         }
 
-        // Create a CoreNLP pipeline
-        Properties props = new Properties();
-        props.put("annotators", "tokenize, ssplit, pos, lemma"); //ner to add
-        // props.put("ner.model", "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz");
-        // props.put("ner.applyNumericClassifiers", "false");
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
         //String[] punct = {",", "''", "``", ".", ":", "!", "--", "-", "`", "'",
         //        "!!", "!!!", "!!!!", "$", "%", "&", "+", "/", ";", "?", "??", "???", "????", "#", "..."};
@@ -365,20 +422,78 @@ public class CorenlpProcessor {
 
                     ArrayList<CoreLabel> sentenceLemmas = new ArrayList<CoreLabel>();
 
-                    //Capture all the lemmas in the sentence, in order
-                    for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-                        String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
+                    //custom phrase token construction
+                    if (customPhrases != null) {
 
-                        String rawpos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+                        ArrayList<CoreLabel> matchingSequence = new ArrayList<>();
+                        int curEndingPos = 0; //Keeps track of substring matches
 
-                        sentenceLemmas.add(token);
+                        PhraseTree curPhrases = customPhrases;
 
-                        if (createPOSphrases) {
-                            //Store only the first letter of each POS for the regex to work currently
-                            simpleSentencePOS = simpleSentencePOS + rawpos.substring(0,1);
+                        for (int i=0; i < sentence.get(CoreAnnotations.TokensAnnotation.class).size(); i++) {
+                            CoreLabel token = sentence.get(CoreAnnotations.TokensAnnotation.class).get(i);
+                            String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
+                            if (curPhrases.hasChild(ending)) {
+                                //Found a good ending, but let's keep extending for a possibly longer one
+                                curEndingPos = matchingSequence.size();
+                            }
+                            if (curPhrases.hasChild(lemma)) {
+                                matchingSequence.add(token);
+                                curPhrases = curPhrases.getNext(lemma);
+                            } else {
+                                if (curEndingPos > 0) {
+                                    List<CoreLabel> matchList = matchingSequence.subList(0,curEndingPos);
+                                    ArrayList<String> matchStrList = new ArrayList<>();
+
+                                    for (CoreLabel match : matchList) {
+                                        matchStrList.add(match.get(CoreAnnotations.LemmaAnnotation.class));
+
+                                    }
+                                    String newPhrase = StringUtils.join(matchStrList, "_");
+
+                                    CoreLabel newPhraseToken = new CoreLabel();
+
+                                    newPhraseToken.setValue(newPhrase);
+                                    newPhraseToken.setWord(newPhrase);
+                                    newPhraseToken.setLemma(newPhrase);
+                                    newPhraseToken.setTag("PHR");
+
+                                    sentenceLemmas.add(newPhraseToken);
+
+
+                                    //reset data used with tree, rollback remaining tokens
+                                    curPhrases = customPhrases;
+                                    int rollback = matchingSequence.subList(curEndingPos, matchingSequence.size()).size();
+                                    curEndingPos = 0;
+                                    i = i-rollback;
+                                    matchingSequence = new ArrayList<>();
+
+
+                                } else {
+                                    sentenceLemmas.add(token);
+                                }
+                            }
+
                         }
 
+
+                    } else {
+                        //Capture all the lemmas in the sentence, in order
+                        for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+                            String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
+
+                            String rawpos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+
+                            sentenceLemmas.add(token);
+
+                            if (createPOSphrases) {
+                                //Store only the first letter of each POS for the regex to work currently
+                                simpleSentencePOS = simpleSentencePOS + rawpos.substring(0,1);
+                            }
+
+                        }
                     }
+
 
                     ArrayList<CoreLabel> finalSentTokenList = new ArrayList<CoreLabel>();
 

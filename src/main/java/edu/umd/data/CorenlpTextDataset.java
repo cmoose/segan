@@ -8,12 +8,9 @@ import java.util.HashMap;
 import java.util.Set;
 
 import edu.stanford.nlp.util.ArraySet;
-import edu.umd.util.DataUtils;
+import edu.umd.util.*;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
-import edu.umd.util.CLIUtils;
-import edu.umd.util.IOUtils;
-import edu.umd.util.StatUtils;
 import edu.umd.util.normalizer.ZNormalizer;
 
 /**
