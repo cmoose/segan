@@ -20,8 +20,6 @@ import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.util.*;
 import edu.stanford.nlp.ling.*;
 
-
-import edu.umd.main.GlobalConstants;
 import edu.umd.util.*;
 import edu.umd.util.IOUtils;
 
@@ -38,34 +36,34 @@ public class CorenlpProcessor {
     private int D; // number of input documents
     private Set<String> excludeFromBigrams; // set of bigrams that should not be considered
     // settings
-    public int unigramCountCutoff; // minimum count of raw unigrams
-    public int bigramCountCutoff; // minimum count of raw bigrams
-    public double bigramScoreCutoff; // minimum bigram score
-    public int maxVocabSize; // maximum vocab size
+    private int unigramCountCutoff; // minimum count of raw unigrams
+    private int bigramCountCutoff; // minimum count of raw bigrams
+    private double bigramScoreCutoff; // minimum bigram score
+    private int maxVocabSize; // maximum vocab size
     // minimum term frequency (for all items in the vocab, including unigrams and bigrams)
-    public int vocabTermFreqMinCutoff;
-    public int vocabTermFreqMaxCutoff; // maximum term frequency
+    private int vocabTermFreqMinCutoff;
+    private int vocabTermFreqMaxCutoff; // maximum term frequency
     // minimum document frequency (for all items in the vocab, including unigrams and bigrams)
-    public int vocabDocFreqMinCutoff;
-    public int vocabDocFreqMaxCutoff; // maximum document frequency 
-    public int docTypeCountCutoff;  // minumum number of types in a document
-    public int minWordLength = 3; // minimum length of a word type 
-    public boolean filterStopwords = true; // whether stopwords are filtered
-    public boolean lemmatization = false; // whether lemmatization should be performed
-    public boolean createPOSphrases = false; // whether to create phrases based on POS regex
-    public String stopwordFile;
-    public PhraseTree customPhrases;
-    public String ending = "$$";
+    private int vocabDocFreqMinCutoff;
+    private int vocabDocFreqMaxCutoff; // maximum document frequency
+    private int docTypeCountCutoff;  // minumum number of types in a document
+    private int minWordLength = 3; // minimum length of a word type
+    private boolean filterStopwords = true; // whether stopwords are filtered
+    private boolean lemmatization = false; // whether lemmatization should be performed
+    private boolean createPOSphrases = false; // whether to create phrases based on POS regex
+    private String stopwordFile;
+    private PhraseTree customPhrases;
+    private String ending = "$$";
 
     // tools
     private StanfordCoreNLP pipeline;
     private StopwordRemoval stopwordRemoval;
-    public HashMap<String, Integer> termFreq;
-    public HashMap<String, Integer> docFreq;
-    protected HashMap<String, Integer> leftFreq;
-    protected HashMap<String, Integer> rightFreq;
-    protected HashMap<String, Integer> bigramFreq;
-    protected int totalBigram;
+    private HashMap<String, Integer> termFreq;
+    private HashMap<String, Integer> docFreq;
+    private HashMap<String, Integer> leftFreq;
+    private HashMap<String, Integer> rightFreq;
+    private HashMap<String, Integer> bigramFreq;
+    private int totalBigram;
     // output data after processing
     private ArrayList<String> vocabulary;
 
@@ -88,7 +86,7 @@ public class CorenlpProcessor {
     }*/
 
     //Has no custom minimum word length, otherwise identical
-    public CorenlpProcessor(
+    CorenlpProcessor(
             int unigramCountCutoff,
             int bigramCountCutoff,
             double bigramScoreCutoff,
@@ -215,7 +213,7 @@ public class CorenlpProcessor {
 
     }
 
-    public CorenlpProcessor(
+    private CorenlpProcessor(
             int unigramCountCutoff,
             int bigramCountCutoff,
             double bigramScoreCutoff,
@@ -272,7 +270,7 @@ public class CorenlpProcessor {
     }
 
 
-    public String getSettings() {
+    String getSettings() {
         StringBuilder str = new StringBuilder();
         str.append("Raw unigram min count:\t").append(unigramCountCutoff).append("\n");
         str.append("Raw bigram min count:\t").append(bigramCountCutoff).append("\n");
@@ -303,7 +301,7 @@ public class CorenlpProcessor {
         this.vocabulary = voc;
     }
 
-    public void loadVocab(String filepath) {
+    void loadVocab(String filepath) {
         try {
             this.vocabulary = new ArrayList<String>();
             BufferedReader reader = IOUtils.getBufferedReader(filepath);

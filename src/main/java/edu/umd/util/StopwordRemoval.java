@@ -69,6 +69,11 @@ public class StopwordRemoval {
         System.out.println(sr.isStopword(stem));
     }
     private static String[] sws = {
+            "",
+        "-lrb-",
+        "-lsb-",
+        "-rrb-",
+        "-rsb-",
         "a",
         "about",
         "above",

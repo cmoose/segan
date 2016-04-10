@@ -45,6 +45,11 @@ public class LDA extends AbstractSampler {
     protected int[][] z;
     protected String priorTopicFile;
 
+    //For Distillery - stores the iteration id of the particular model of models
+    //Used for keeping track of status of the sampler
+    private String iterationID;
+    private String iterationStatusFilePath;
+
     public LDA() {
         this.basename = "LDA";
     }
@@ -113,6 +118,49 @@ public class LDA extends AbstractSampler {
             this.name += "_reprocess";
         }
     }
+
+    /*
+     * Below functions needed for Distillery
+     */
+    public void setIterationID(String iterationID) {
+        this.iterationID = iterationID;
+    }
+    public String getIterationID() {
+        return this.iterationID;
+    }
+    public void setIterationStatusFilePath(String iterationStatusFilePath) {
+        this.iterationStatusFilePath = iterationStatusFilePath;
+    }
+    //Write current status of # of iterations run to a file
+    private void writeIterationStatus(String status) {
+
+        IOUtils.createFolder(iterationStatusFilePath);
+        //Filename is iterationID
+        File iterStatusFile = new File(iterationStatusFilePath + "/" + iterationID);
+
+        try {
+            BufferedWriter writer = IOUtils.getBufferedWriter(iterStatusFile);
+            writer.write(status);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Exception while outputing iteration status to "
+                    + iterStatusFile);
+        }
+    }
+    @Override
+    protected void logln(String msg) {
+        System.out.println("[LOG - iterid " + iterationID + "] " + msg);
+        try {
+            if (logger != null) {
+                this.logger.write(msg + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
 
     /**
      * Return the current topic assignments for all tokens.
@@ -321,9 +369,16 @@ public class LDA extends AbstractSampler {
                     // store llh after every iteration
                     double loglikelihood = this.getLogLikelihood();
                     logLikelihoods.add(loglikelihood);
+
+                    //Write iteration status to file
+                    if (iter % (REP_INTERVAL*2) == 0) { //Every 50 iterations
+                        String curIter = iter + "/" + MAX_ITER;
+                        writeIterationStatus(curIter);
+                    }
+
                     String str = "Iter " + iter + "/" + MAX_ITER
-                            + "\t llh = " + loglikelihood
-                            + "\n" + getCurrentState();
+                            + "\t llh = " + loglikelihood;
+                            //+ "\n" + getCurrentState();
                     if (iter < BURN_IN) {
                         logln("--- Burning in. " + str);
                     } else {
